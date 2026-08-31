@@ -42,8 +42,8 @@ export default function ContentManagerPage() {
 
   const [formData, setFormData] = useState({
     // ================= NAVBAR & HEADER =================
-    brand_name_en: 'Birkhal Youth Social Welfare Organization',
-    brand_name_bn: 'বীরখাল যুব সমাজ কল্যাণ সংগঠন',
+    brand_name_en: 'Birkhal Youth Welfare Organization',
+    brand_name_bn: 'বীরখাল সমাজ কল্যাণ যুব সংগঠন',
     logo_url: '/logo.png',
 
     // Top Notification / Donation Ticker

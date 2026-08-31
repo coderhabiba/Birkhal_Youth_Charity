@@ -25,7 +25,13 @@ export function Navbar({ settings = {} }: { settings?: Record<string, string> })
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const logoUrl = settings["logo_url"] || "/logo.png";
-  const brandName = (language === "bn" ? settings["brand_name_bn"] : settings["brand_name_en"]) || (language === "bn" ? "বীরখাল সমাজ কল্যাণ যুব সংগঠন" : "Birkhal Youth Welfare Organization");
+  const rawBrandBn = settings["brand_name_bn"];
+  const rawBrandEn = settings["brand_name_en"];
+
+  const brandName = (language === "bn"
+    ? (rawBrandBn && rawBrandBn !== "বীরখাল যুব সংগঠন" && rawBrandBn !== "বীরখাল যুব সমাজ কল্যাণ সংগঠন" ? rawBrandBn : "বীরখাল সমাজ কল্যাণ যুব সংগঠন")
+    : (rawBrandEn && rawBrandEn !== "Birkhal Youth" && rawBrandEn !== "Birkhal Youth Social Welfare Organization" && rawBrandEn !== "Birkhal Youth Organization" ? rawBrandEn : "Birkhal Youth Welfare Organization")
+  );
 
   useEffect(() => {
     const checkAuthStatus = async () => {

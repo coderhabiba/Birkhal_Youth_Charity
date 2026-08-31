@@ -33,10 +33,30 @@ export default async function RootLayout({
   let settingsMap: Record<string, string> = {};
   try {
     await connectToDatabase();
+
+    // Auto-update legacy brand names in database if present
+    try {
+      await Setting.updateMany(
+        { key: "brand_name_bn", value: { $in: ["বীরখাল যুব সংগঠন", "বীরখাল যুব সমাজ কল্যাণ সংগঠন"] } },
+        { value: "বীরখাল সমাজ কল্যাণ যুব সংগঠন" }
+      );
+      await Setting.updateMany(
+        { key: "brand_name_en", value: { $in: ["Birkhal Youth", "Birkhal Youth Organization", "Birkhal Youth Social Welfare Organization"] } },
+        { value: "Birkhal Youth Welfare Organization" }
+      );
+    } catch (e) {}
+
     const rawSettings = await Setting.find().lean();
     rawSettings.forEach((s: any) => {
       settingsMap[s.key] = s.value;
     });
+
+    if (!settingsMap["brand_name_bn"] || settingsMap["brand_name_bn"] === "বীরখাল যুব সংগঠন" || settingsMap["brand_name_bn"] === "বীরখাল যুব সমাজ কল্যাণ সংগঠন") {
+      settingsMap["brand_name_bn"] = "বীরখাল সমাজ কল্যাণ যুব সংগঠন";
+    }
+    if (!settingsMap["brand_name_en"] || settingsMap["brand_name_en"] === "Birkhal Youth" || settingsMap["brand_name_en"] === "Birkhal Youth Social Welfare Organization" || settingsMap["brand_name_en"] === "Birkhal Youth Organization") {
+      settingsMap["brand_name_en"] = "Birkhal Youth Welfare Organization";
+    }
   } catch (err) {
     console.error("Failed to load settings in RootLayout", err);
   }

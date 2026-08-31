@@ -36,7 +36,13 @@ export function Footer({ settings = {} }: { settings?: Record<string, string> })
   }, []);
 
   const logoUrl = settings["logo_url"] || "/logo.png";
-  const brandName = (language === "bn" ? settings["brand_name_bn"] : settings["brand_name_en"]) || (language === "bn" ? "বীরখাল সমাজ কল্যাণ যুব সংগঠন" : "Birkhal Youth Welfare Organization");
+  const rawBrandBn = settings["brand_name_bn"];
+  const rawBrandEn = settings["brand_name_en"];
+
+  const brandName = (language === "bn"
+    ? (rawBrandBn && rawBrandBn !== "বীরখাল যুব সংগঠন" && rawBrandBn !== "বীরখাল যুব সমাজ কল্যাণ সংগঠন" ? rawBrandBn : "বীরখাল সমাজ কল্যাণ যুব সংগঠন")
+    : (rawBrandEn && rawBrandEn !== "Birkhal Youth" && rawBrandEn !== "Birkhal Youth Social Welfare Organization" && rawBrandEn !== "Birkhal Youth Organization" ? rawBrandEn : "Birkhal Youth Welfare Organization")
+  );
 
   const footerDesc = (language === "bn" ? settings["footer_desc_bn"] : settings["footer_desc_en"]) || (
     language === "bn" ? "একটি শক্তিশালী, সৎ, মানবিক ও স্বাবলম্বী সমাজ বিনির্মাণে বীরখাল যুবসমাজের নিরলস পথচলা।" : "Building a stronger, transparent, and empowered community together."
@@ -75,7 +81,9 @@ export function Footer({ settings = {} }: { settings?: Record<string, string> })
             </div>
             <div className="text-left">
               <h4 className="font-bold text-lg text-growth-green leading-tight">{brandName}</h4>
-              <p className="text-[11px] text-on-surface-variant">চান্দিনা, কুমিল্লা | স্থাপিত: ২০১৫</p>
+              <p className="text-[11px] text-on-surface-variant">
+                {language === "bn" ? "চান্দিনা, কুমিল্লা | স্থাপিত: ২০১৫" : "Chandina, Cumilla | Est. 2015"}
+              </p>
             </div>
           </div>
           
