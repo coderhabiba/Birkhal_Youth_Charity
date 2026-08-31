@@ -1,26 +1,241 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
+  --color-primary: var(--color-primary);
+  --color-on-primary: #ffffff;
+  --color-on-primary-fixed-variant: #00332a;
+  --color-outline: var(--color-outline);
+  --color-on-tertiary-fixed: #0c1c18;
+  --color-on-surface-variant: var(--color-on-surface-variant);
+  --color-secondary-container: #fef3c7; /* Warm Amber Gold */
+  --color-outline-variant: var(--color-outline-variant);
+  --color-growth-green: var(--color-growth-green);
+  --color-error-container: #ffdad6;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface-dim: #b2dfdb;
+  --color-inverse-surface: #0c1a16;
+  --color-primary-fixed-dim: #00796b;
+  --color-surface-tint: #004d40;
+  --color-surface-variant: var(--surface-variant);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-bright: #f1f8f6;
+  --color-secondary-fixed: #fde68a;
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-on-background: var(--foreground);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-error: #ba1a1a;
+  --color-inverse-on-surface: #e0f2f1;
+  --color-secondary-fixed-dim: #fcd34d;
+  --color-on-primary-fixed: #00251a;
+  --color-surface-off-white: var(--surface-off-white);
+  --color-on-tertiary-fixed-variant: #2d3b37;
+  --color-tertiary-fixed-dim: #b2c2bf;
+  --color-on-primary-container: #80cbc4;
+  --color-on-surface: var(--color-on-surface);
+  --color-on-error-container: #93000a;
+  --color-on-secondary-fixed-variant: #78350f;
+  --color-reliability-blue: #0288D1;
+  --color-impact-orange: #f59e0b; /* Vibrant Warm Amber-Orange */
+  --color-sunset-orange: #f97316; /* Energetic Orange */
+  --color-tertiary: #2e3b37;
+  --color-on-error: #ffffff;
+  --color-on-tertiary: #ffffff;
+  --color-inverse-primary: #80cbc4;
+  --color-tertiary-fixed: #c8d6d3;
+  --color-surface-container-high: var(--surface-container-high);
+  --color-primary-container: #004d40;
+  --color-primary-fixed: #80cbc4;
+  --color-on-secondary-container: #451a03;
+  --color-tertiary-container: #3e4d49;
+  --color-on-secondary-fixed: #000000;
+  --color-on-secondary: #ffffff;
+  --color-secondary: #f59e0b; /* Vibrant Warm Gold/Amber */
+  --color-border: var(--color-border);
+  --color-surface: var(--surface-base);
+  --color-surface-container: var(--surface-container);
+
+  /* Spacing */
+  --spacing-gutter: 24px;
+  --spacing-margin-desktop: 48px;
+  --spacing-margin-mobile: 16px;
+  --spacing-container-max: 1380px;
+  --spacing-unit: 8px;
+
+  /* Typography */
+  --font-headline-md: var(--font-raleway);
+  --font-headline-lg: var(--font-raleway);
+  --font-headline-xl: var(--font-raleway);
+  --font-bengali-support: var(--font-hind-siliguri);
+  --font-body-md: var(--font-raleway);
+  --font-headline-lg-mobile: var(--font-raleway);
+  --font-body-lg: var(--font-raleway);
+  /* Border Radiuses: Unified Subtle Rounded Scale */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 8px;
+  --radius-xl: 8px;
+  --radius-2xl: 8px;
+  --radius-3xl: 8px;
+  --radius-4xl: 8px;
+  --radius: 8px;
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #f1f8f6;
+    --foreground: #0c1a16;
+    --surface-off-white: #f7faf9;
+    --surface-container-lowest: #ffffff;
+    --surface-container-low: #f5f9f7;
+    --surface-container: #eff4f2;
+    --surface-container-high: #e8eeec;
+    --surface-container-highest: #e0e7e5;
+    --surface-base: #f5f9f7;
+    --surface-variant: #eef3f1;
+    --color-on-surface: #0c1a16;
+    --color-on-surface-variant: #4b635c;
+    --color-growth-green: #004d40;
+    --color-primary: #004337;
+    --color-outline: rgba(0, 77, 64, 0.12);
+    --color-outline-variant: #94a3b8;
+    --color-border: rgba(0, 77, 64, 0.08);
+  }
+  .dark {
+    --background: #000000;
+    --foreground: #ffffff;
+    --surface-off-white: #0a0a0a;
+    --surface-container-lowest: #0c0c0c;
+    --surface-container-low: #111111;
+    --surface-container: #141414;
+    --surface-container-high: #1a1a1a;
+    --surface-container-highest: #212121;
+    --surface-base: #0e0e0e;
+    --surface-variant: #181818;
+    --color-on-surface: #ffffff;
+    --color-on-surface-variant: #cbd5e1;
+    --color-growth-green: #10b981;
+    --color-primary: #2dd4bf;
+    --color-outline: rgba(255, 255, 255, 0.15);
+    --color-outline-variant: #94a3b8;
+    --color-primary-fixed-dim: #00897b;
+    --color-primary-container: rgba(38, 166, 154, 0.15);
+    --color-on-primary-container: #e0f2f1;
+    --color-secondary-container: rgba(255, 179, 0, 0.15);
+    --color-on-secondary-container: #fff8e1;
+    --color-border: rgba(255, 255, 255, 0.12);
+  }
+
+  * {
+    border-color: var(--color-border);
+  }
+
+  input, select, textarea {
+    color: var(--foreground);
+    border-color: var(--color-border);
+    border-radius: 8px;
+  }
+  
+  option {
+    background-color: var(--background);
+    color: var(--foreground);
   }
 }
 
+@layer utilities {
+  .border-border {
+    border-color: var(--color-border);
+  }
+  
+  /* Global Glassmorphism Class */
+  .glass {
+    background: var(--color-surface-container-low);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--color-border);
+  }
+}
+
+/* Global Background Mesh */
 body {
-  background: var(--background);
+  background-color: var(--background);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(38, 166, 154, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(255, 179, 0, 0.06) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(38, 166, 154, 0.06) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(255, 179, 0, 0.06) 0px, transparent 50%);
+  background-attachment: fixed;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+.dark body {
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(38, 166, 154, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(255, 179, 0, 0.03) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(38, 166, 154, 0.03) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(255, 179, 0, 0.03) 0px, transparent 50%);
+}
+
+html[data-lang="bn"] body,
+html[data-lang="bn"] .font-headline-md,
+html[data-lang="bn"] .font-headline-lg,
+html[data-lang="bn"] .font-headline-xl,
+html[data-lang="bn"] .font-body-md,
+html[data-lang="bn"] .font-body-lg,
+html[data-lang="bn"] .font-label-md {
+  font-family: var(--font-hind-siliguri), sans-serif;
+}
+
+html[data-lang="en"] body,
+html[data-lang="en"] .font-headline-md,
+html[data-lang="en"] .font-headline-lg,
+html[data-lang="en"] .font-headline-xl,
+html[data-lang="en"] .font-body-md,
+html[data-lang="en"] .font-body-lg,
+html[data-lang="en"] .font-label-md {
+  font-family: var(--font-raleway), sans-serif;
+}
+
+.bengali-text {
+  font-family: var(--font-hind-siliguri), sans-serif;
+}
+
+@layer utilities {
+  .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
+  .animate-slide-up { animation: slideUp 0.6s ease-out forwards; opacity: 0; }
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+
+  /* Magic UI / Aceternity Style Infinite Marquee Utilities */
+  .animate-marquee {
+    display: flex;
+    width: max-content;
+    animation: marquee 40s linear infinite;
+  }
+  .animate-marquee:hover, .group:hover .animate-marquee {
+    animation-play-state: paused;
+  }
+  .animate-marquee-reverse {
+    display: flex;
+    width: max-content;
+    animation: marqueeReverse 40s linear infinite;
+  }
+  .animate-marquee-reverse:hover, .group:hover .animate-marquee-reverse {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes marqueeReverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0%); }
 }
