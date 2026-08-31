@@ -103,7 +103,7 @@ export default function RegistrationPage() {
               />
             </div>
             <h3 className="font-headline-md text-xl font-bold text-growth-green mb-1">
-              {language === "bn" ? "বীরখাল যুব সংগঠন" : "Birkhal Youth"}
+              {language === "bn" ? "বীরখাল সমাজ কল্যাণ যুব সংগঠন" : "Birkhal Social Welfare Youth Organization"}
             </h3>
             <p className="text-xs text-on-surface-variant mb-6">
               {language === "bn" ? "একটি আদর্শ ও মানবিক সমাজ গঠনের প্রত্যয়ে" : "Committed to humanity & sustainable youth development"}
