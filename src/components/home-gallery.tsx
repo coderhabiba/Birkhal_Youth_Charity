@@ -53,6 +53,12 @@ export function HomeGallery({
   // Fallback items using real ground-level activity photos with matching titles & tags
   const defaultGallery = [
     {
+      _id: 'g-0',
+      title: 'ফটো ও কার্যক্রম অ্যালবাম - আমাদের সমাজসেবার মুহূর্তসমূহ',
+      url: '/gallery-sample.svg',
+      tag: 'ACTIVITIES',
+    },
+    {
       _id: 'g-1',
       title: 'বীরখাল সমাজ কল্যাণ যুব সংগঠনের ঐক্যবদ্ধ সমাজসেবা কার্যক্রম',
       url: '/up-1.jpeg',
