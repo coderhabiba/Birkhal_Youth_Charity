@@ -36,7 +36,7 @@ export function Footer({ settings = {} }: { settings?: Record<string, string> })
   }, []);
 
   const logoUrl = settings["logo_url"] || "/logo.png";
-  const brandName = (language === "bn" ? settings["brand_name_bn"] : settings["brand_name_en"]) || settings["org_name"] || "বীরখাল সমাজ কল্যাণ যুব সংগঠন";
+  const brandName = (language === "bn" ? settings["brand_name_bn"] : settings["brand_name_en"]) || (language === "bn" ? "বীরখাল সমাজ কল্যাণ যুব সংগঠন" : "Birkhal Youth Welfare Organization");
 
   const footerDesc = (language === "bn" ? settings["footer_desc_bn"] : settings["footer_desc_en"]) || (
     language === "bn" ? "একটি শক্তিশালী, সৎ, মানবিক ও স্বাবলম্বী সমাজ বিনির্মাণে বীরখাল যুবসমাজের নিরলস পথচলা।" : "Building a stronger, transparent, and empowered community together."

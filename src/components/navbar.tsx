@@ -25,7 +25,7 @@ export function Navbar({ settings = {} }: { settings?: Record<string, string> })
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const logoUrl = settings["logo_url"] || "/logo.png";
-  const brandName = (language === "bn" ? settings["brand_name_bn"] : settings["brand_name_en"]) || settings["org_name"] || "বীরখাল যুব সংগঠন";
+  const brandName = (language === "bn" ? settings["brand_name_bn"] : settings["brand_name_en"]) || (language === "bn" ? "বীরখাল সমাজ কল্যাণ যুব সংগঠন" : "Birkhal Youth Welfare Organization");
 
   useEffect(() => {
     const checkAuthStatus = async () => {
