@@ -7,16 +7,30 @@ export interface IContact extends Document {
   subject: string;
   message: string;
   status: 'unread' | 'read' | 'replied';
+  approvalStatus: 'pending' | 'approved' | 'rejected';
   createdAt: Date;
 }
 
-const ContactSchema: Schema = new Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-  phone: { type: String, required: false },
-  subject: { type: String, required: true },
-  message: { type: String, required: true },
-  status: { type: String, enum: ['unread', 'read', 'replied'], default: 'unread' }
-}, { timestamps: true });
+const ContactSchema: Schema = new Schema(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    phone: { type: String, required: false },
+    subject: { type: String, required: true },
+    message: { type: String, required: true },
+    status: {
+      type: String,
+      enum: ['unread', 'read', 'replied'],
+      default: 'unread',
+    },
+    approvalStatus: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected'],
+      default: 'pending',
+    },
+  },
+  { timestamps: true },
+);
 
-export default mongoose.models.Contact || mongoose.model<IContact>('Contact', ContactSchema);
+export default mongoose.models.Contact ||
+  mongoose.model<IContact>('Contact', ContactSchema);

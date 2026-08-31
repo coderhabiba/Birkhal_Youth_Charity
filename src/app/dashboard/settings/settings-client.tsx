@@ -13,7 +13,7 @@ export function DashboardSettingsClient({ settingsData }: { settingsData: any })
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
-    org_name: settingsData['org_name'] || "Birkhal Youth",
+    org_name: settingsData['org_name'] || "Birkhal Youth Social Welfare Organization",
     logo_url: settingsData['logo_url'] || "/logo.png",
     tagline_en: settingsData['tagline_en'] || "Empowering the Next Generation of Leaders",
     tagline_bn: settingsData['tagline_bn'] || "পরবর্তী প্রজন্মের নেতাদের ক্ষমতায়ন",

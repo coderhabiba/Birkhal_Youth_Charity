@@ -22,7 +22,7 @@ export function SocialChatButtons({ settings = {} }: { settings?: Record<string,
   const whatsappMessage = encodeURIComponent(
     language === "bn"
       ? "আসসালামু আলাইকুম, আমি বীরখাল সমাজ কল্যাণ যুব সংগঠন সম্পর্কে জানতে ও সহায়তা করতে চাই।"
-      : "Assalamu Alaikum, I would like to know more about Birkhal Youth Charity Organization."
+      : "Assalamu Alaikum, I would like to know more about Birkhal Youth Social Welfare Organization."
   );
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
   

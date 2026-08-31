@@ -166,7 +166,7 @@ export function QuickDonationModal({
             </div>
 
             <h3 className="font-headline-lg text-xl sm:text-2xl font-bold text-white">
-              {language === "bn" ? "বীরখাল সমাজ কল্যাণ যুব সংগঠন" : "Birkhal Youth Welfare Fund"}
+              {language === "bn" ? "বীরখাল সমাজ কল্যাণ যুব সংগঠন" : "Birkhal Youth Social Welfare Organization Fund"}
             </h3>
             <p className="text-xs text-white/90 mt-1 max-w-md">
               {language === "bn"

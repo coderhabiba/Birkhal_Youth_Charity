@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -96,15 +97,27 @@ export default function LoginPage() {
                   <Lock className="w-5 h-5 text-on-surface-variant" />
                 </div>
                 <input 
-                  type="password" 
+                  type={showPassword ? "text" : "password"} 
                   id="password" 
                   name="password" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••" 
                   required 
-                  className="block w-full pl-10 pr-3 py-3 border border-border bg-surface dark:bg-background text-foreground placeholder:text-outline-variant focus:outline-none focus:border-growth-green text-sm rounded-xl" 
+                  className="block w-full pl-10 pr-10 py-3 border border-border bg-surface dark:bg-background text-foreground placeholder:text-outline-variant focus:outline-none focus:border-growth-green text-sm rounded-xl" 
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-on-surface-variant hover:text-foreground transition-colors cursor-pointer"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
               </div>
             </div>
 

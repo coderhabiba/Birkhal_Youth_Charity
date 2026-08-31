@@ -22,7 +22,7 @@ export function TopDonationBanner({ settings = {} }: { settings?: Record<string,
   const bannerText = (language === "bn" ? settings["top_banner_text_bn"] : settings["top_banner_text_en"]) || (
     language === "bn"
       ? "বীরখাল সমাজ কল্যাণ যুব সংগঠনের তহবিলে আপনার যাকাত ও অনুদান দিন। বিকাশ/নগদ: 01882447721"
-      : "Support Birkhal Youth Welfare Fund with your Zakat & Charity. bKash/Nagad: 01882447721"
+      : "Support Birkhal Youth Social Welfare Organization Fund with your Zakat & Charity. bKash/Nagad: 01882447721"
   );
 
   const btnText = (language === "bn" ? settings["top_banner_btn_bn"] : settings["top_banner_btn_en"]) || (

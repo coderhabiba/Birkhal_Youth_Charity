@@ -9,17 +9,35 @@ export interface IEvent extends Document {
   contactPhone?: string;
   type: 'fundraiser' | 'workshop' | 'campaign' | 'meeting';
   status: 'upcoming' | 'ongoing' | 'completed';
+  approvalStatus: 'pending' | 'approved' | 'rejected';
 }
 
-const EventSchema: Schema = new Schema({
-  title: { type: String, required: true },
-  date: { type: Date, required: true },
-  location: { type: String, required: true },
-  description: { type: String, required: true },
-  image: { type: String, required: false },
-  contactPhone: { type: String, required: false },
-  type: { type: String, enum: ['fundraiser', 'workshop', 'campaign', 'meeting'], default: 'campaign' },
-  status: { type: String, enum: ['upcoming', 'ongoing', 'completed'], default: 'upcoming' }
-}, { timestamps: true });
+const EventSchema: Schema = new Schema(
+  {
+    title: { type: String, required: true },
+    date: { type: Date, required: true },
+    location: { type: String, required: true },
+    description: { type: String, required: true },
+    image: { type: String, required: false },
+    contactPhone: { type: String, required: false },
+    type: {
+      type: String,
+      enum: ['fundraiser', 'workshop', 'campaign', 'meeting'],
+      default: 'campaign',
+    },
+    status: {
+      type: String,
+      enum: ['upcoming', 'ongoing', 'completed'],
+      default: 'upcoming',
+    },
+    approvalStatus: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected'],
+      default: 'pending',
+    },
+  },
+  { timestamps: true },
+);
 
-export default mongoose.models.Event || mongoose.model<IEvent>('Event', EventSchema);
+export default mongoose.models.Event ||
+  mongoose.model<IEvent>('Event', EventSchema);

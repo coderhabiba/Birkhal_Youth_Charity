@@ -9,20 +9,22 @@ export async function POST(request: Request) {
     // Connect to MongoDB
     await connectToDatabase();
 
-    // Create a new member
+    // Create a new member with pending status
     const newMember = new Member({
       nameBn: data.nameBn,
-      nameEn: data.nameEn,
-      fatherHusbandName: data.fatherHusbandName,
+      nameEn: data.nameEn || '',
+      fatherHusbandName: data.fatherHusbandName || data.fatherName || '',
       motherName: data.motherName,
-      dateOfBirth: data.dateOfBirth,
+      dateOfBirth: data.dateOfBirth || data.dob || '',
       bloodGroup: data.bloodGroup || undefined,
       mobileNumber: data.mobileNumber,
+      whatsappNumber: data.whatsappNumber || '',
       email: data.email || undefined,
-      nidOrBirthCert: data.nidOrBirthCert,
+      nidOrBirthCert: data.nidOrBirthCert || data.nidOrBirthReg || '',
       presentAddress: data.presentAddress,
       permanentAddress: data.permanentAddress,
       photoUrl: data.photoUrl || undefined,
+      status: 'pending', // Explicitly pending until admin approves
     });
 
     const savedMember = await newMember.save();

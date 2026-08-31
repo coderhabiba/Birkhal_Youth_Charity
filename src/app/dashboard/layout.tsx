@@ -58,10 +58,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           onClick={() => setMobileNavOpen(!mobileNavOpen)}
           className="p-2 border border-border bg-surface dark:bg-background text-foreground flex items-center gap-2 font-bold text-xs cursor-pointer shadow-xs rounded-xl"
         >
-          {mobileNavOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-          <span>{language === "bn" ? "ড্যাশবোর্ড মেনু" : "Dashboard Menu"}</span>
+          {mobileNavOpen ? (
+            <X className="w-4 h-4" />
+          ) : (
+            <Menu className="w-4 h-4" />
+          )}
+          <span>
+            {language === 'bn' ? 'ড্যাশবোর্ড মেনু' : 'Dashboard Menu'}
+          </span>
         </button>
-        <span className="font-bold text-xs px-2.5 py-0.5 rounded-lg bg-amber-500/10 text-amber-600 border border-amber-500/20">Admin Console</span>
+        <span className="font-bold text-xs px-2.5 py-0.5 rounded-lg bg-amber-500/10 text-amber-600 border border-amber-500/20">
+          Admin Console
+        </span>
       </div>
 
       <div className="flex flex-1 relative">
@@ -76,23 +84,32 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* SideNavBar - Proper z-index & positioning below header */}
         <aside
           className={`fixed left-0 top-0 h-screen flex-col px-4 pb-4 pt-[140px] border-r border-border bg-surface-container-low dark:bg-surface-container-lowest w-64 shadow-sm z-40 md:z-30 overflow-y-auto transition-transform duration-300 ${
-            mobileNavOpen ? "translate-x-0 flex" : "-translate-x-full md:translate-x-0 md:flex"
+            mobileNavOpen
+              ? 'translate-x-0 flex'
+              : '-translate-x-full md:translate-x-0 md:flex'
           }`}
         >
           <div className="mb-5 px-3 flex items-center gap-3">
             <div className="w-9 h-9 overflow-hidden relative shrink-0 rounded-xl">
-              <Image src="/logo.png" alt="Logo" fill className="object-contain" />
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                fill
+                className="object-contain"
+              />
             </div>
             <div>
-              <h2 className="text-base font-bold text-growth-green leading-tight">Birkhal Youth</h2>
+              <h2 className="text-base font-bold text-growth-green leading-tight">
+                Birkhal Youth Social Welfare Organization
+              </h2>
               <p className="text-[11px] text-on-surface-variant font-medium">
-                {language === "bn" ? "অ্যাডমিন প্যানেল" : "Admin Console"}
+                {language === 'bn' ? 'অ্যাডমিন প্যানেল' : 'Admin Console'}
               </p>
             </div>
           </div>
-          
+
           <nav className="flex-1 space-y-1">
-            {navItems.map((item) => {
+            {navItems.map(item => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
               return (
@@ -102,22 +119,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   onClick={() => setMobileNavOpen(false)}
                   className={`flex items-center gap-3 px-3.5 py-2 font-bold text-xs transition-all border rounded-xl ${
                     isActive
-                      ? "bg-growth-green text-white border-growth-green shadow-xs"
-                      : "text-on-surface-variant border-transparent hover:bg-surface-variant/80 dark:hover:bg-white/5 hover:text-foreground"
+                      ? 'bg-growth-green text-white border-growth-green shadow-xs'
+                      : 'text-on-surface-variant border-transparent hover:bg-surface-variant/80 dark:hover:bg-white/5 hover:text-foreground'
                   }`}
                 >
-                  <Icon className="w-4 h-4" /> {language === "bn" ? item.labelBn : item.labelEn}
+                  <Icon className="w-4 h-4" />{' '}
+                  {language === 'bn' ? item.labelBn : item.labelEn}
                 </Link>
               );
             })}
           </nav>
-          
+
           <div className="mt-5 pt-3 border-t border-border">
             <button
               onClick={handleLogout}
               className="w-full flex items-center gap-3 px-3.5 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 font-bold text-xs transition-all border border-transparent hover:border-red-200 cursor-pointer rounded-xl"
             >
-              <LogOut className="w-4 h-4" /> {language === "bn" ? "লগআউট" : "Logout"}
+              <LogOut className="w-4 h-4" />{' '}
+              {language === 'bn' ? 'লগআউট' : 'Logout'}
             </button>
           </div>
         </aside>

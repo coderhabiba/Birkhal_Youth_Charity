@@ -42,8 +42,8 @@ export default function ContentManagerPage() {
 
   const [formData, setFormData] = useState({
     // ================= NAVBAR & HEADER =================
-    brand_name_en: 'Birkhal Youth',
-    brand_name_bn: 'বীরখাল যুব সংগঠন',
+    brand_name_en: 'Birkhal Youth Social Welfare Organization',
+    brand_name_bn: 'বীরখাল যুব সমাজ কল্যাণ সংগঠন',
     logo_url: '/logo.png',
 
     // Top Notification / Donation Ticker
@@ -187,7 +187,7 @@ export default function ContentManagerPage() {
     about_hero_title_en: 'Empowering the Next Generation of Leaders',
     about_hero_title_bn: 'পরবর্তী প্রজন্মের নেতাদের ক্ষমতায়ন',
     about_hero_desc_en:
-      'Birkhal Youth Organization is dedicated to fostering growth, education, and community engagement among the youth of Cumilla, Chandina, and Kaduti Bazar.',
+      'Birkhal Youth Social Welfare Organization is dedicated to fostering growth, education, and community engagement among the youth of Cumilla, Chandina, and Kaduti Bazar.',
     about_hero_desc_bn:
       'বীরখাল সমাজ কল্যাণ যুব সংগঠন কুমিল্লা, চান্দিনা এবং কাদুটি বাজারের যুবসমাজের মধ্যে প্রবৃদ্ধি, শিক্ষা এবং সামাজিক সম্পৃক্ততা বৃদ্ধির জন্য নিবেদিত।',
 
@@ -246,7 +246,7 @@ export default function ContentManagerPage() {
 
     // ================= CONTACT PAGE =================
     contact_hero_image: '/ai_relief.jpg',
-    contact_hero_title_en: 'Get in Touch with Birkhal Youth',
+    contact_hero_title_en: 'Get in Touch with Birkhal Youth Social Welfare Organization',
     contact_hero_title_bn: 'বীরখাল সমাজ কল্যাণ যুব সংগঠনের সাথে যোগাযোগ',
     contact_hero_desc_en:
       'We are here to answer any questions you may have about our youth initiatives. Reach out to us anytime.',
@@ -263,7 +263,7 @@ export default function ContentManagerPage() {
     footer_desc_en:
       'Building a stronger, transparent, and empowered community together.',
     footer_desc_bn: 'একটি শক্তিশালী, সৎ ও মানবিক সমাজ গড়ার অঙ্গীকার।',
-    footer_copyright_en: '© 2026 Birkhal Youth. All rights reserved.',
+    footer_copyright_en: '© 2026 Birkhal Youth Social Welfare Organization. All rights reserved.',
     footer_copyright_bn:
       '© ২০২৬ বীরখাল সমাজ কল্যাণ যুব সংগঠন। সর্বস্বত্ব সংরক্ষিত।',
 
