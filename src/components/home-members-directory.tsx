@@ -5,15 +5,9 @@ import { useState } from "react";
 import { 
   Users, 
   MapPin, 
-  Search, 
-  Heart, 
+  Search,
   User as UserIcon, 
-  Phone, 
-  Mail, 
-  Filter, 
-  Sparkles,
   ArrowRight,
-  ShieldAlert,
   Droplet
 } from "lucide-react";
 import Link from "next/link";
@@ -270,12 +264,12 @@ export function HomeMembersDirectory({
                   <MapPin className="w-3.5 h-3.5 text-growth-green shrink-0 mt-0.5" />
                   <span className="line-clamp-2 text-[11px]">{address}</span>
                 </div>
-                {member.mobileNumber && (
+                {/* {member.mobileNumber && (
                   <div className="flex items-center gap-1.5 text-[11px] font-bold text-foreground opacity-90">
                     <Phone className="w-3 h-3 text-growth-green" />
                     <span>{member.mobileNumber}</span>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
           );

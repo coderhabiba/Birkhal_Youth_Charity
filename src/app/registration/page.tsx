@@ -228,9 +228,9 @@ export default function RegistrationPage() {
 
               <div className="space-y-1.5">
                 <label htmlFor="bloodGroup" className="font-label-md text-xs font-bold text-foreground block">
-                  {language === "bn" ? "৬. রক্তের গ্রুপ *" : "6. Blood Group *"}
+                  {language === "bn" ? "৬. রক্তের গ্রুপ" : "6. Blood Group"}{language === "bn" ? "(ঐচ্ছিক)" : "(Requierd)"}
                 </label>
-                <select required id="bloodGroup" name="bloodGroup" className="w-full bg-surface dark:bg-background border border-border px-3.5 py-2.5 text-sm focus:outline-none focus:border-growth-green transition-colors text-foreground cursor-pointer rounded-xl">
+                <select id="bloodGroup" name="bloodGroup" className="w-full bg-surface dark:bg-background border border-border px-3.5 py-2.5 text-sm focus:outline-none focus:border-growth-green transition-colors text-foreground cursor-pointer rounded-xl">
                   <option value="">{language === "bn" ? "রক্তের গ্রুপ নির্বাচন করুন" : "Select Blood Group"}</option>
                   <option value="A+">A+</option>
                   <option value="A-">A-</option>
@@ -266,9 +266,9 @@ export default function RegistrationPage() {
 
               <div className="space-y-1.5">
                 <label htmlFor="nidOrBirthReg" className="font-label-md text-xs font-bold text-foreground block">
-                  {language === "bn" ? "১০. এনআইডি / জন্ম নিবন্ধন নম্বর *" : "10. NID / Birth Reg No *"}
+                  {language === "bn" ? "১০. এনআইডি / জন্ম নিবন্ধন নম্বর" : "10. NID / Birth Reg No"}{language === "bn" ? "(ঐচ্ছিক)" : "(Requierd)"}
                 </label>
-                <input required type="text" id="nidOrBirthReg" name="nidOrBirthReg" className="w-full bg-surface dark:bg-background border border-border px-3.5 py-2.5 text-sm focus:outline-none focus:border-growth-green transition-colors text-foreground rounded-xl" />
+                <input type="text" id="nidOrBirthReg" name="nidOrBirthReg" className="w-full bg-surface dark:bg-background border border-border px-3.5 py-2.5 text-sm focus:outline-none focus:border-growth-green transition-colors text-foreground rounded-xl" />
               </div>
             </div>
 
