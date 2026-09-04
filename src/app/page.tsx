@@ -10,53 +10,63 @@ import { HomeClient } from "./home-client";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  await connectToDatabase();
+  let initialReviews: any[] = [];
+  let committeeMembers: any[] = [];
+  let generalMembers: any[] = [];
+  let galleryMedia: any[] = [];
+  let eventsList: any[] = [];
+  let settingsMap: Record<string, string> = {};
 
-  // Fetch approved reviews, committee members, approved general members, settings, media, and active events concurrently
-  const [rawReviews, rawCommittee, rawMembers, rawSettings, rawMedia, rawEvents] = await Promise.all([
-    Review.find({ status: 'approved' }).sort({ createdAt: -1 }).lean(),
-    Committee.find().sort({ createdAt: 1 }).lean(),
-    Member.find({ status: 'approved' }).sort({ createdAt: -1 }).lean(),
-    Setting.find().lean(),
-    Media.find({ isDoc: false }).sort({ createdAt: -1 }).limit(12).lean(),
-    Event.find({ status: { $in: ['upcoming', 'ongoing'] } }).sort({ date: 1 }).lean(),
-  ]);
+  try {
+    await connectToDatabase();
 
-  const initialReviews = rawReviews.map((r: any) => ({
-    ...r,
-    _id: r._id.toString(),
-    createdAt: r.createdAt ? r.createdAt.toISOString() : null,
-  }));
+    // Fetch approved reviews, committee members, approved general members, settings, media, and active events concurrently
+    const [rawReviews, rawCommittee, rawMembers, rawSettings, rawMedia, rawEvents] = await Promise.all([
+      Review.find({ status: 'approved' }).sort({ createdAt: -1 }).lean(),
+      Committee.find().sort({ createdAt: 1 }).lean(),
+      Member.find({ status: 'approved' }).sort({ createdAt: -1 }).lean(),
+      Setting.find().lean(),
+      Media.find({ isDoc: false }).sort({ createdAt: -1 }).limit(12).lean(),
+      Event.find({ status: { $in: ['upcoming', 'ongoing'] } }).sort({ date: 1 }).lean(),
+    ]);
 
-  const committeeMembers = rawCommittee.map((c: any) => ({
-    ...c,
-    _id: c._id.toString(),
-    createdAt: c.createdAt ? c.createdAt.toISOString() : null,
-  }));
+    initialReviews = rawReviews.map((r: any) => ({
+      ...r,
+      _id: r._id.toString(),
+      createdAt: r.createdAt ? r.createdAt.toISOString() : null,
+    }));
 
-  const generalMembers = rawMembers.map((m: any) => ({
-    ...m,
-    _id: m._id.toString(),
-    createdAt: m.createdAt ? m.createdAt.toISOString() : null,
-  }));
+    committeeMembers = rawCommittee.map((c: any) => ({
+      ...c,
+      _id: c._id.toString(),
+      createdAt: c.createdAt ? c.createdAt.toISOString() : null,
+    }));
 
-  const galleryMedia = rawMedia.map((m: any) => ({
-    ...m,
-    _id: m._id.toString(),
-    createdAt: m.createdAt ? m.createdAt.toISOString() : null,
-  }));
+    generalMembers = rawMembers.map((m: any) => ({
+      ...m,
+      _id: m._id.toString(),
+      createdAt: m.createdAt ? m.createdAt.toISOString() : null,
+    }));
 
-  const eventsList = rawEvents.map((e: any) => ({
-    ...e,
-    _id: e._id.toString(),
-    date: e.date ? e.date.toISOString() : null,
-    createdAt: e.createdAt ? e.createdAt.toISOString() : null,
-  }));
+    galleryMedia = rawMedia.map((m: any) => ({
+      ...m,
+      _id: m._id.toString(),
+      createdAt: m.createdAt ? m.createdAt.toISOString() : null,
+    }));
 
-  const settingsMap: Record<string, string> = {};
-  rawSettings.forEach((s: any) => {
-    settingsMap[s.key] = s.value;
-  });
+    eventsList = rawEvents.map((e: any) => ({
+      ...e,
+      _id: e._id.toString(),
+      date: e.date ? e.date.toISOString() : null,
+      createdAt: e.createdAt ? e.createdAt.toISOString() : null,
+    }));
+
+    rawSettings.forEach((s: any) => {
+      settingsMap[s.key] = s.value;
+    });
+  } catch (err) {
+    console.error("Failed to load home page data from MongoDB:", err);
+  }
 
   return (
     <HomeClient 
