@@ -366,6 +366,7 @@ export function HomeGallery({
                   src={item.url}
                   alt={item.title}
                   fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   unoptimized={(item.url || '').startsWith('data:')}
                   className="object-cover object-top group-hover:scale-110 transition-transform duration-700 ease-in-out"
                 />
@@ -440,6 +441,7 @@ export function HomeGallery({
                 src={selectedImage.url}
                 alt={selectedImage.title}
                 fill
+                sizes="100vw"
                 unoptimized={(selectedImage.url || '').startsWith('data:')}
                 className="object-contain w-full h-full"
               />

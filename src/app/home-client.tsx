@@ -27,14 +27,17 @@ import {
   Calendar,
   Layers,
 } from 'lucide-react';
-import { HomeCommitteeSlider } from '@/components/home-committee-slider';
-import { HomeMembersDirectory } from '@/components/home-members-directory';
-import { HomeGallery } from '@/components/home-gallery';
-import { HomeMap } from '@/components/home-map';
+import dynamic from 'next/dynamic';
+
+const HomeCommitteeSlider = dynamic(() => import('@/components/home-committee-slider').then(mod => mod.HomeCommitteeSlider), { loading: () => <div className="h-96 flex items-center justify-center text-muted-foreground">Loading Committee...</div> });
+const HomeMembersDirectory = dynamic(() => import('@/components/home-members-directory').then(mod => mod.HomeMembersDirectory), { loading: () => <div className="h-96 flex items-center justify-center text-muted-foreground">Loading Members...</div> });
+const HomeGallery = dynamic(() => import('@/components/home-gallery').then(mod => mod.HomeGallery), { loading: () => <div className="h-96 flex items-center justify-center text-muted-foreground">Loading Gallery...</div> });
+const HomeMap = dynamic(() => import('@/components/home-map').then(mod => mod.HomeMap), { loading: () => <div className="h-96 flex items-center justify-center text-muted-foreground">Loading Map...</div> });
+const OrganizationRules = dynamic(() => import('@/components/organization-rules').then(mod => mod.OrganizationRules), { loading: () => <div className="h-96 flex items-center justify-center text-muted-foreground">Loading Rules...</div> });
+const HomeReviewsSlider = dynamic(() => import('@/components/home-reviews-slider').then(mod => mod.HomeReviewsSlider), { loading: () => <div className="h-96 flex items-center justify-center text-muted-foreground">Loading Reviews...</div> });
+const HomeEventsSection = dynamic(() => import('@/components/home-events-section').then(mod => mod.HomeEventsSection), { loading: () => <div className="h-96 flex items-center justify-center text-muted-foreground">Loading Events...</div> });
+
 import { Footer } from '@/components/footer';
-import { OrganizationRules } from '@/components/organization-rules';
-import { HomeReviewsSlider } from '@/components/home-reviews-slider';
-import { HomeEventsSection } from '@/components/home-events-section';
 
 export function HomeClient({
   initialReviews,

@@ -16,6 +16,7 @@ import {
   Phone
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 import { 
   translateBanglaName, 
@@ -275,9 +276,12 @@ export function HomeCommitteeSlider({
               <div className="relative shrink-0">
                 <div className="w-36 h-40 md:w-44 md:h-48 overflow-hidden border-2 border-growth-green shadow-xl bg-surface-variant relative rounded-xl">
                   {activeMember.image ? (
-                    <img 
+                    <Image 
                       src={activeMember.image} 
                       alt={activeName}
+                      fill
+                      loading="lazy"
+                      sizes="(max-width: 768px) 150px, 200px"
                       className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 rounded-xl"
                     />
                   ) : (

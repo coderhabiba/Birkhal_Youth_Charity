@@ -26,7 +26,8 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { format } from 'date-fns';
-import { DashboardDonationChart } from '@/components/dashboard-donation-chart';
+import dynamic from 'next/dynamic';
+const DashboardDonationChart = dynamic(() => import('@/components/dashboard-donation-chart').then(mod => mod.DashboardDonationChart), { loading: () => <div className="h-96 flex items-center justify-center bg-surface-container-lowest rounded-xl border border-border shadow-sm text-muted-foreground">Loading Analytics Chart...</div> });
 
 export function DashboardOverviewClient({
   stats,

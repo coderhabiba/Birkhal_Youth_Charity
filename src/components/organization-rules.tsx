@@ -13,7 +13,9 @@ import {
   AlertOctagon
 } from "lucide-react";
 
-export function OrganizationRules({ settings = {} }: { settings?: Record<string, string> }) {
+import React from "react";
+
+export const OrganizationRules = React.memo(function OrganizationRules({ settings = {} }: { settings?: Record<string, string> }) {
   const { language } = useLanguage();
 
   const rulesHeading = (language === "bn" ? settings["rules_heading_bn"] : settings["rules_heading_en"]) || (
@@ -174,4 +176,4 @@ export function OrganizationRules({ settings = {} }: { settings?: Record<string,
       </div>
     </section>
   );
-}
+});
