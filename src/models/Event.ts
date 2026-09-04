@@ -39,5 +39,7 @@ const EventSchema: Schema = new Schema(
   { timestamps: true },
 );
 
+EventSchema.index({ status: 1, date: 1 });
+
 export default mongoose.models.Event ||
   mongoose.model<IEvent>('Event', EventSchema);

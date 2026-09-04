@@ -18,4 +18,6 @@ const MediaSchema: Schema = new Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
+MediaSchema.index({ isDoc: 1, createdAt: -1 });
+
 export default mongoose.models.Media || mongoose.model<IMedia>('Media', MediaSchema);
