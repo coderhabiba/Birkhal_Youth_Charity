@@ -107,6 +107,7 @@ export function Navbar({ settings = {} }: { settings?: Record<string, string> })
                   src={logoUrl} 
                   alt={`${brandName} Logo`} 
                   fill
+                  sizes="36px"
                   className="object-contain p-0.5" 
                   priority 
                   unoptimized={logoUrl.startsWith("data:")}

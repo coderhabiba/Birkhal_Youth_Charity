@@ -5,6 +5,9 @@ import Committee from "@/models/Committee";
 import ActivityLog from "@/models/ActivityLog";
 import { revalidatePath } from "next/cache";
 
+import { processBase64Image } from "@/lib/uploadHelper";
+import { invalidateCache } from "@/lib/cache";
+
 export async function createCommitteeMember(data: {
   name: string;
   role: string;
@@ -16,6 +19,9 @@ export async function createCommitteeMember(data: {
 }) {
   await connectToDatabase();
   try {
+    if (data.image && data.image.startsWith('data:image')) {
+      data.image = processBase64Image(data.image, 'committee');
+    }
     const member = await Committee.create(data);
     
     try {
@@ -27,6 +33,9 @@ export async function createCommitteeMember(data: {
       });
     } catch (e) {}
 
+    invalidateCache('about-page-data');
+    invalidateCache('home-page-data');
+    invalidateCache('dashboard-committee');
     revalidatePath("/dashboard/committee");
     revalidatePath("/");
     revalidatePath("/about");
@@ -47,6 +56,9 @@ export async function updateCommitteeMember(id: string, data: {
 }) {
   await connectToDatabase();
   try {
+    if (data.image && data.image.startsWith('data:image')) {
+      data.image = processBase64Image(data.image, `committee_${id}`);
+    }
     const member = await Committee.findByIdAndUpdate(id, data, { new: true });
     if (!member) throw new Error("Committee member not found");
 
@@ -59,6 +71,9 @@ export async function updateCommitteeMember(id: string, data: {
       });
     } catch (e) {}
 
+    invalidateCache('about-page-data');
+    invalidateCache('home-page-data');
+    invalidateCache('dashboard-committee');
     revalidatePath("/dashboard/committee");
     revalidatePath("/");
     revalidatePath("/about");

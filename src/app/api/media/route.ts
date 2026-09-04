@@ -2,17 +2,11 @@ import { NextResponse } from 'next/server';
 import connectToDatabase from '@/lib/mongodb';
 import Media from '@/models/Media';
 import ActivityLog from '@/models/ActivityLog';
+import { processBase64Image } from '@/lib/uploadHelper';
 
 export async function GET() {
   try {
     await connectToDatabase();
-    
-    // Auto-migrate legacy /support*.jpeg URLs to new high-res matching images
-    await Media.updateMany({ url: '/support1.jpeg' }, { url: '/up-1.jpeg' });
-    await Media.updateMany({ url: '/support2.jpeg' }, { url: '/ai_relief.jpg' });
-    await Media.updateMany({ url: '/support3.jpeg' }, { url: '/ai_education.jpg' });
-    await Media.updateMany({ url: '/support4.jpeg' }, { url: '/ai_plantation.jpg' });
-
     const media = await Media.find().sort({ createdAt: -1 }).lean();
     return NextResponse.json(media);
   } catch (error: any) {
@@ -25,9 +19,11 @@ export async function POST(request: Request) {
     await connectToDatabase();
     const data = await request.json();
 
+    const imageUrl = processBase64Image(data.url, 'media');
+
     const newMedia = await Media.create({
       title: data.title || 'Uploaded Asset',
-      url: data.url,
+      url: imageUrl,
       size: data.size || '1.2 MB',
       tag: data.tag || 'GALLERY',
       isDoc: data.isDoc || false,

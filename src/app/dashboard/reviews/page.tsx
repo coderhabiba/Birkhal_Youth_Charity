@@ -1,6 +1,6 @@
 import { DashboardReviewsClient } from "./reviews-client";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default function DashboardReviewsPage() {
   return <DashboardReviewsClient />;

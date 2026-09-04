@@ -277,7 +277,9 @@ export function HomeClient({
                   src={heroImage}
                   alt="Birkhal Youth Members"
                   fill
+                  sizes="(max-width: 1024px) 100vw, 58vw"
                   priority
+                  loading="eager"
                   unoptimized={normalizeImageUrl(
                     settings['home_hero_image'],
                     '/ai_education.jpg',
@@ -397,6 +399,7 @@ export function HomeClient({
                   )}
                   alt="Education"
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   unoptimized={normalizeImageUrl(
                     settings['cause_1_image'],
                     '/ai_education.jpg',
@@ -451,6 +454,7 @@ export function HomeClient({
                   )}
                   alt="Plantation & Environment"
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   unoptimized={normalizeImageUrl(
                     settings['cause_2_image'],
                     '/ai_plantation.jpg',
@@ -505,6 +509,7 @@ export function HomeClient({
                   )}
                   alt="Healthcare"
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   unoptimized={normalizeImageUrl(
                     settings['cause_3_image'],
                     '/ai_medical.jpg',
@@ -559,6 +564,7 @@ export function HomeClient({
                   )}
                   alt="Emergency Relief"
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   unoptimized={normalizeImageUrl(
                     settings['cause_4_image'],
                     '/ai_relief.jpg',

@@ -95,6 +95,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 src="/logo.png"
                 alt="Logo"
                 fill
+                sizes="36px"
                 className="object-contain"
               />
             </div>

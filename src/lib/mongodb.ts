@@ -15,15 +15,27 @@ async function connectToDatabase() {
     return null;
   }
 
-  if (cached.conn) {
+  // Check if existing connection is still alive (readyState 1 = connected)
+  if (cached.conn && mongoose.connection.readyState === 1) {
     return cached.conn;
+  }
+
+  // If connection dropped, reset both conn and promise so we reconnect
+  if (cached.conn && mongoose.connection.readyState !== 1) {
+    cached.conn = null;
+    cached.promise = null;
   }
 
   if (!cached.promise) {
     const opts = {
-      bufferCommands: false,
+      bufferCommands: true,
+      maxPoolSize: 10,
+      minPoolSize: 2,
       serverSelectionTimeoutMS: 10000,
-      socketTimeoutMS: 45000,
+      socketTimeoutMS: 30000,
+      connectTimeoutMS: 15000,
+      heartbeatFrequencyMS: 10000,
+      maxIdleTimeMS: 30000,
     };
 
     cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => {
@@ -34,6 +46,7 @@ async function connectToDatabase() {
   try {
     cached.conn = await cached.promise;
   } catch (e) {
+    cached.conn = null;
     cached.promise = null;
     throw e;
   }
@@ -42,3 +55,4 @@ async function connectToDatabase() {
 }
 
 export default connectToDatabase;
+

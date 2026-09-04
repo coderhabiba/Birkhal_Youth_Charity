@@ -1,21 +1,31 @@
 import connectToDatabase from '@/lib/mongodb';
 import Member from '@/models/Member';
 import { MembersClient } from './members-client';
+import { cachedQuery } from '@/lib/cache';
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
-export default async function PublicMembersPage() {
+async function getMembersData() {
   await connectToDatabase();
-  // Fetch only approved members. We lean() to convert to plain objects and map _id to string for the client.
   const rawMembers = await Member.find({ status: 'approved' })
     .sort({ createdAt: -1 })
     .lean();
 
-  const members = rawMembers.map((m: any) => ({
+  return rawMembers.map((m: any) => ({
     ...m,
     _id: m._id.toString(),
     createdAt: m.createdAt.toISOString(),
   }));
+}
+
+export default async function PublicMembersPage() {
+  let members: any[] = [];
+  try {
+    members = await cachedQuery('public-members', getMembersData, 60_000);
+  } catch (e) {
+    console.error("Failed to load members:", e);
+  }
 
   return <MembersClient members={members} />;
 }
+
