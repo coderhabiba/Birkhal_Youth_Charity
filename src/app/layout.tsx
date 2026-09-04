@@ -6,8 +6,6 @@ import { LanguageProvider } from "@/components/language-provider";
 import { Navbar } from "@/components/navbar";
 import { FloatingDonationButton } from "@/components/floating-donation-button";
 import { SocialChatButtons } from "@/components/social-chat-buttons";
-import connectToDatabase from "@/lib/mongodb";
-import Setting from "@/models/Setting";
 
 const hindSiliguri = Hind_Siliguri({
   subsets: ["bengali"],
@@ -25,29 +23,15 @@ export const metadata: Metadata = {
   description: "Official Charity & Youth Welfare Portal for Birkhal, Chandina, Cumilla",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let settingsMap: Record<string, string> = {};
-  try {
-    await connectToDatabase();
-
-    const rawSettings = await Setting.find().lean();
-    rawSettings.forEach((s: any) => {
-      settingsMap[s.key] = s.value;
-    });
-
-    if (!settingsMap["brand_name_bn"] || settingsMap["brand_name_bn"] === "বীরখাল যুব সংগঠন" || settingsMap["brand_name_bn"] === "বীরখাল যুব সমাজ কল্যাণ সংগঠন") {
-      settingsMap["brand_name_bn"] = "বীরখাল সমাজ কল্যাণ যুব সংগঠন";
-    }
-    if (!settingsMap["brand_name_en"] || settingsMap["brand_name_en"] === "Birkhal Youth" || settingsMap["brand_name_en"] === "Birkhal Youth Social Welfare Organization" || settingsMap["brand_name_en"] === "Birkhal Youth Organization") {
-      settingsMap["brand_name_en"] = "Birkhal Youth Welfare Organization";
-    }
-  } catch (err) {
-    console.error("Failed to load settings in RootLayout", err);
-  }
+  const settingsMap: Record<string, string> = {
+    brand_name_bn: "বীরখাল সমাজ কল্যাণ যুব সংগঠন",
+    brand_name_en: "Birkhal Youth Welfare Organization",
+  };
 
   return (
     <html lang="bn" suppressHydrationWarning>

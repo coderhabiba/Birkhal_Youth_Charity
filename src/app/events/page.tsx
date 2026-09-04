@@ -3,7 +3,7 @@ import Event from "@/models/Event";
 import Setting from "@/models/Setting";
 import { EventsPageClient } from "./events-client";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function PublicEventsPage() {
   await connectToDatabase();

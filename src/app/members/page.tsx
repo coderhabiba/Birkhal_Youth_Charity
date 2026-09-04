@@ -2,7 +2,7 @@ import connectToDatabase from '@/lib/mongodb';
 import Member from '@/models/Member';
 import { MembersClient } from './members-client';
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function PublicMembersPage() {
   await connectToDatabase();

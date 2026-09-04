@@ -3,7 +3,7 @@ import DonationEntry from "@/models/DonationEntry";
 import Setting from "@/models/Setting";
 import { DonationsClient } from "./donations-client";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function PublicDonationsPage() {
   await connectToDatabase();
