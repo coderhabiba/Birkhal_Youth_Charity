@@ -34,18 +34,6 @@ export default async function RootLayout({
   try {
     await connectToDatabase();
 
-    // Auto-update legacy brand names in database if present
-    try {
-      await Setting.updateMany(
-        { key: "brand_name_bn", value: { $in: ["বীরখাল যুব সংগঠন", "বীরখাল যুব সমাজ কল্যাণ সংগঠন"] } },
-        { value: "বীরখাল সমাজ কল্যাণ যুব সংগঠন" }
-      );
-      await Setting.updateMany(
-        { key: "brand_name_en", value: { $in: ["Birkhal Youth", "Birkhal Youth Organization", "Birkhal Youth Social Welfare Organization"] } },
-        { value: "Birkhal Youth Welfare Organization" }
-      );
-    } catch (e) {}
-
     const rawSettings = await Setting.find().lean();
     rawSettings.forEach((s: any) => {
       settingsMap[s.key] = s.value;

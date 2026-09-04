@@ -11,20 +11,6 @@ export const revalidate = 0; // Fresh dynamic data on every request
 
 export default async function Home() {
   await connectToDatabase();
-  
-  // Auto-migrate legacy URLs in database and remove unwanted items
-  try {
-    await Media.deleteMany({ title: { $regex: /যুবসমাজ উন্নয়ন ও দক্ষতা প্রশিক্ষণ|দক্ষতা প্রশিক্ষণ/i } });
-    await Media.updateMany({ url: '/support1.jpeg' }, { url: '/up-1.jpeg' });
-    await Media.updateMany({ url: '/support2.jpeg' }, { url: '/ai_relief.jpg' });
-    await Media.updateMany({ url: '/support3.jpeg' }, { url: '/ai_education.jpg' });
-    await Media.updateMany({ url: '/support4.jpeg' }, { url: '/ai_plantation.jpg' });
-
-    // Ensure stats default to 0 if legacy dummy values exist
-    await Setting.updateMany({ key: 'stat_volunteers', value: { $in: ['500+', '500'] } }, { value: '0' });
-    await Setting.updateMany({ key: 'stat_trees', value: { $in: ['1,200+', '1K+', '1200+'] } }, { value: '0' });
-    await Setting.updateMany({ key: 'stat_students', value: { $in: ['250+', '200+'] } }, { value: '0' });
-  } catch (e) {}
 
   // Fetch approved reviews, committee members, approved general members, settings, media, and active events concurrently
   const [rawReviews, rawCommittee, rawMembers, rawSettings, rawMedia, rawEvents] = await Promise.all([
