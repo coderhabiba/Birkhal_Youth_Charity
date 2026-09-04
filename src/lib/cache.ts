@@ -73,8 +73,9 @@ export async function cachedQuery<T>(
       inFlight.delete(key);
       console.error(`[cache] Query failed for key "${key}":`, err.message || err);
       // If we have any previous stale cache, fallback to it
-      if (entry) {
-        return entry.data;
+      const fallback = cache.get(key);
+      if (fallback) {
+        return fallback.data;
       }
       throw err;
     });

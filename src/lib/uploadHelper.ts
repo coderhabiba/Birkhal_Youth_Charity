@@ -10,7 +10,7 @@ export function processBase64Image(dataUrl: string, prefix: string = 'img'): str
     return dataUrl;
   }
   try {
-    const match = dataUrl.match(/^data:image\/([a-zA-Z0-9+.-]+);base64,(.+)$/s);
+    const match = dataUrl.match(/^data:image\/([a-zA-Z0-9+.-]+);base64,([\s\S]+)$/);
     if (!match) return dataUrl;
 
     let ext = match[1].toLowerCase();
