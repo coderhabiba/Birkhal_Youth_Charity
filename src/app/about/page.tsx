@@ -3,7 +3,7 @@ import Setting from "@/models/Setting";
 import Committee from "@/models/Committee";
 import { AboutClient } from "./about-client";
 
-export const revalidate = 0; // Dynamic settings on every request
+export const revalidate = 60;
 
 export default async function AboutPage() {
   await connectToDatabase();

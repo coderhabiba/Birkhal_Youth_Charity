@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { CustomPageClient } from "./custom-page-client";
 import { Metadata } from "next";
 
-export const revalidate = 0; // Dynamic server render
+export const revalidate = 60;
 
 export async function generateMetadata({
   params,

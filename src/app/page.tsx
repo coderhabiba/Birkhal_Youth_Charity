@@ -7,7 +7,7 @@ import Media from "@/models/Media";
 import Event from "@/models/Event";
 import { HomeClient } from "./home-client";
 
-export const revalidate = 0; // Fresh dynamic data on every request
+export const revalidate = 60; // Cache page at Edge for fast response
 
 export default async function Home() {
   await connectToDatabase();

@@ -2,7 +2,7 @@ import connectToDatabase from "@/lib/mongodb";
 import Setting from "@/models/Setting";
 import { ContactClient } from "./contact-client";
 
-export const revalidate = 0; // Dynamic settings on every request
+export const revalidate = 60;
 
 export default async function ContactPage() {
   await connectToDatabase();
