@@ -3,6 +3,9 @@ import connectToDatabase from '@/lib/mongodb';
 import Event from '@/models/Event';
 import ActivityLog from '@/models/ActivityLog';
 import { revalidatePath } from 'next/cache';
+import { processBase64Image } from '@/lib/uploadHelper';
+
+export const dynamic = 'force-dynamic';
 
 export async function PUT(
   request: Request,
@@ -12,6 +15,10 @@ export async function PUT(
     const { id } = await params;
     const data = await request.json();
     await connectToDatabase();
+
+    if (data.image) {
+      data.image = processBase64Image(data.image, 'event');
+    }
 
     const updatedEvent = await Event.findByIdAndUpdate(id, data, { new: true });
     if (!updatedEvent) {

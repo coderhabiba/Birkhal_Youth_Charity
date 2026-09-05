@@ -3,6 +3,9 @@ import connectToDatabase from '@/lib/mongodb';
 import Event from '@/models/Event';
 import ActivityLog from '@/models/ActivityLog';
 import { revalidatePath } from 'next/cache';
+import { processBase64Image } from '@/lib/uploadHelper';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
@@ -18,6 +21,14 @@ export async function POST(request: Request) {
   try {
     const data = await request.json();
     await connectToDatabase();
+
+    if (data.image) {
+      data.image = processBase64Image(data.image, 'event');
+    }
+    if (!data.approvalStatus) {
+      data.approvalStatus = 'approved';
+    }
+
     const newEvent = new Event(data);
     await newEvent.save();
 

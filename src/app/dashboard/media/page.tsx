@@ -32,7 +32,8 @@ export default function MediaLibraryPage() {
       const res = await fetch("/api/media");
       if (res.ok) {
         const data = await res.json();
-        if (data.length === 0) {
+        const list = Array.isArray(data) ? data : (data.media || []);
+        if (list.length === 0) {
           const defaultItems = [
             { title: "বীরখাল সমাজ কল্যাণ যুব সংগঠনের ঐক্যবদ্ধ সমাজসেবা কার্যক্রম", url: "/up-1.jpeg", size: "950 KB", tag: "ACTIVITIES", isDoc: false },
             { title: "বন্যা ও দুর্যোগকালীন জরুরি ত্রাণ বিতরণ", url: "/ai_relief.jpg", size: "1.1 MB", tag: "RELIEF", isDoc: false },
@@ -49,9 +50,10 @@ export default function MediaLibraryPage() {
             });
           }
           const seeded = await fetch("/api/media");
-          setMediaItems(await seeded.json());
+          const seededData = await seeded.json();
+          setMediaItems(Array.isArray(seededData) ? seededData : (seededData.media || []));
         } else {
-          setMediaItems(data);
+          setMediaItems(list);
         }
       }
     } catch (err) {
@@ -102,7 +104,8 @@ export default function MediaLibraryPage() {
       });
 
       if (res.ok) {
-        const added = await res.json();
+        const resData = await res.json();
+        const added = resData.media || resData;
         setMediaItems([added, ...mediaItems]);
         setShowUploadModal(false);
         setNewTitle("");
@@ -134,7 +137,8 @@ export default function MediaLibraryPage() {
       });
 
       if (res.ok) {
-        const updated = await res.json();
+        const resData = await res.json();
+        const updated = resData.media || resData.event || resData;
         setMediaItems(mediaItems.map((m) => (m._id === updated._id ? updated : m)));
         setEditingItem(null);
       } else {

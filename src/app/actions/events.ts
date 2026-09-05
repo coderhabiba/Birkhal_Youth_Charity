@@ -4,6 +4,7 @@ import connectToDatabase from '@/lib/mongodb';
 import Event from '@/models/Event';
 import ActivityLog from '@/models/ActivityLog';
 import { revalidatePath } from 'next/cache';
+import { processBase64Image } from '@/lib/uploadHelper';
 
 export async function updateEventApprovalStatus(
   id: string,
@@ -51,6 +52,9 @@ export async function updateEventDetails(
 ) {
   await connectToDatabase();
   try {
+    if (data.image) {
+      data.image = processBase64Image(data.image, 'event');
+    }
     const event = await Event.findByIdAndUpdate(id, data, { new: true });
     if (!event) throw new Error('Event not found');
 
@@ -80,9 +84,16 @@ export async function createEventAction(data: {
   contactPhone?: string;
   type: 'fundraiser' | 'workshop' | 'campaign' | 'meeting';
   status: 'upcoming' | 'ongoing' | 'completed';
+  approvalStatus?: string;
 }) {
   await connectToDatabase();
   try {
+    if (data.image) {
+      data.image = processBase64Image(data.image, 'event');
+    }
+    if (!data.approvalStatus) {
+      data.approvalStatus = 'approved';
+    }
     const event = await Event.create(data);
 
     try {

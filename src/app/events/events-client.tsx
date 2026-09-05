@@ -206,6 +206,17 @@ export function EventsPageClient({
                   </span>
                 </div>
 
+                {/* Event Image Banner if available */}
+                {event.image && (
+                  <div className="relative w-full aspect-video sm:h-44 rounded-xl overflow-hidden mb-4 border border-border/60 bg-black/5">
+                    <img
+                      src={event.image}
+                      alt={event.title}
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                )}
+
                 {/* Date & Title */}
                 <div className="flex gap-4 items-start mb-3">
                   <div className="shrink-0 w-14 h-14 bg-growth-green/10 dark:bg-growth-green/20 border border-growth-green/30 rounded-xl flex flex-col items-center justify-center text-growth-green shadow-xs">

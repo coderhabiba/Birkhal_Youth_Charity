@@ -4,6 +4,8 @@ import Media from '@/models/Media';
 import ActivityLog from '@/models/ActivityLog';
 import { processBase64Image } from '@/lib/uploadHelper';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     await connectToDatabase();
@@ -38,7 +40,7 @@ export async function POST(request: Request) {
       });
     } catch (e) {}
 
-    return NextResponse.json({ success: true, media: newMedia }, { status: 201 });
+    return NextResponse.json(newMedia, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message || "Failed to save media" }, { status: 400 });
   }

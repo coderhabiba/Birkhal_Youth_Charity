@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import connectToDatabase from '@/lib/mongodb';
 import Media from '@/models/Media';
 import ActivityLog from '@/models/ActivityLog';
+import { processBase64Image } from '@/lib/uploadHelper';
+
+export const dynamic = 'force-dynamic';
 
 export async function PUT(
   request: Request,
@@ -12,12 +15,14 @@ export async function PUT(
     const body = await request.json();
     await connectToDatabase();
 
+    const imageUrl = body.url ? processBase64Image(body.url, 'media') : body.url;
+
     const updatedMedia = await Media.findByIdAndUpdate(
       id,
       {
         title: body.title,
         tag: body.tag,
-        url: body.url,
+        url: imageUrl,
         isDoc: body.isDoc ?? false,
       },
       { new: true }

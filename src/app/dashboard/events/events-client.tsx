@@ -265,14 +265,23 @@ export function DashboardEventsClient({
             key={event._id}
             className="bg-surface-container-low dark:bg-surface-container-lowest p-6 shadow-sm border border-border flex flex-col md:flex-row gap-6 hover:shadow-md transition-shadow backdrop-blur-md rounded-xl"
           >
-            <div className="flex flex-col items-center justify-center bg-surface-variant dark:bg-white/5 border border-border p-4 min-w-[110px] text-center shrink-0 rounded-xl">
+            <div className="flex flex-col items-center justify-center bg-surface-variant dark:bg-white/5 border border-border p-3 min-w-[120px] max-w-[120px] text-center shrink-0 rounded-xl overflow-hidden self-start">
+              {event.image && (
+                <div className="w-full h-16 mb-2 rounded-lg overflow-hidden border border-border/50 bg-black/10 shrink-0">
+                  <img
+                    src={event.image}
+                    alt={event.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
               <span className="text-xs font-bold text-growth-green uppercase">
                 {format(new Date(event.date), 'MMM')}
               </span>
-              <span className="text-3xl font-bold text-foreground">
+              <span className="text-2xl sm:text-3xl font-bold text-foreground leading-tight">
                 {format(new Date(event.date), 'dd')}
               </span>
-              <span className="text-xs text-on-surface-variant mt-1">
+              <span className="text-[11px] text-on-surface-variant mt-0.5">
                 {format(new Date(event.date), 'yyyy')}
               </span>
             </div>
