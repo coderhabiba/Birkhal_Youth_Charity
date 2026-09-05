@@ -1,6 +1,7 @@
 import connectToDatabase from '@/lib/mongodb';
 import Member from '@/models/Member';
 import DonationEntry from '@/models/DonationEntry';
+import Expense from '@/models/Expense';
 import Review from '@/models/Review';
 import Event from '@/models/Event';
 import { DashboardOverviewClient } from './dashboard-client';
@@ -17,6 +18,7 @@ async function getDashboardData() {
   const completedDonations = await DonationEntry.find({ status: 'Completed' })
     .select('amount date createdAt category donorName')
     .lean();
+  const expenses = await Expense.find().select('amount').lean();
   const activeEvents = await Event.countDocuments({ status: 'upcoming' });
   const totalReviews = await Review.countDocuments();
   const recentMembers = await Member.find().sort({ createdAt: -1 }).limit(5).lean();
@@ -26,10 +28,19 @@ async function getDashboardData() {
     0,
   );
 
+  const totalExpenses = expenses.reduce(
+    (sum: number, e: any) => sum + (e.amount || 0),
+    0,
+  );
+
+  const netBalance = totalDonations - totalExpenses;
+
   const stats = {
     totalMembers,
     pendingMembers,
     totalDonations,
+    totalExpenses,
+    netBalance,
     activeEvents,
     totalReviews,
   };
@@ -53,7 +64,15 @@ async function getDashboardData() {
 }
 
 export default async function DashboardOverview() {
-  let stats = { totalMembers: 0, pendingMembers: 0, totalDonations: 0, activeEvents: 0, totalReviews: 0 };
+  let stats = {
+    totalMembers: 0,
+    pendingMembers: 0,
+    totalDonations: 0,
+    totalExpenses: 0,
+    netBalance: 0,
+    activeEvents: 0,
+    totalReviews: 0,
+  };
   let recentRegistrations: any[] = [];
   let serializableDonations: any[] = [];
 

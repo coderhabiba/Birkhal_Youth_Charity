@@ -23,6 +23,9 @@ import {
   Clock,
   CheckCircle,
   FileText,
+  Calculator,
+  TrendingDown,
+  Wallet,
 } from 'lucide-react';
 import Link from 'next/link';
 import { format } from 'date-fns';
@@ -39,6 +42,10 @@ export function DashboardOverviewClient({
   donations?: any[];
 }) {
   const { language } = useLanguage();
+
+  const totalDonations = Number(stats?.totalDonations) || 0;
+  const totalExpenses = Number(stats?.totalExpenses) || 0;
+  const netBalance = stats?.netBalance !== undefined ? Number(stats.netBalance) : (totalDonations - totalExpenses);
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -62,6 +69,15 @@ export function DashboardOverviewClient({
 
         <div className="flex flex-wrap items-center gap-3">
           <Link
+            href="/dashboard/calculator"
+            className="bg-purple-600 hover:bg-purple-700 text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl shadow-md shadow-purple-500/20 hover:shadow-lg hover:shadow-purple-500/30 transition-all flex items-center gap-2 cursor-pointer"
+          >
+            <Calculator className="w-4 h-4" />
+            <span>
+              {language === 'bn' ? 'আয়-ব্যয় হিসাব ও ক্যালকুলেটর' : 'Income & Expenses'}
+            </span>
+          </Link>
+          <Link
             href="/dashboard/members"
             className="bg-growth-green hover:bg-[#1b501f] text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-md shadow-growth-green/20 hover:shadow-lg hover:shadow-growth-green/30 transition-all cursor-pointer"
           >
@@ -82,9 +98,95 @@ export function DashboardOverviewClient({
         </div>
       </div>
 
-      {/* 5 Key Metric Cards in 1 Row on Desktop, Fully Responsive for Mobile, Tablet & Desktop */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3.5 sm:gap-4 xl:gap-4">
-        {/* Metric 1: Total Members (Royal Sapphire Blue) */}
+      {/* 6 Key Metric Cards - Full Financial Overview & Activities */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5 sm:gap-4">
+        {/* Metric 1: Total Donations / Income (Emerald Growth Green) */}
+        <Link
+          href="/dashboard/donations"
+          className="bg-surface-container-lowest dark:bg-surface-container-low p-4 sm:p-5 rounded-xl border border-border shadow-xs hover:shadow-md hover:border-emerald-500/40 hover:-translate-y-0.5 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between"
+        >
+          <div className="absolute top-0 right-0 w-20 h-20 bg-emerald-500/5 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
+                <Heart className="w-5 h-5 text-emerald-600 fill-emerald-600" />
+              </div>
+              <span className="text-[10px] sm:text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full flex items-center gap-1">
+                <ArrowUpRight className="w-2.5 h-2.5" />
+                <span>{language === 'bn' ? 'আয় / অনুদান' : 'Income'}</span>
+              </span>
+            </div>
+            <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-on-surface-variant truncate">
+              {language === 'bn' ? 'মোট অনুদান' : 'Total Donations'}
+            </p>
+            <p className="text-xl xl:text-2xl font-black text-foreground mt-1">
+              ৳{totalDonations.toLocaleString()}
+            </p>
+          </div>
+          <p className="text-[10px] sm:text-[11px] text-growth-green mt-2 font-bold truncate">
+            {language === 'bn' ? 'সংগৃহীত অনুদান' : 'Total Income'}
+          </p>
+        </Link>
+
+        {/* Metric 2: Total Expenses (Crimson / Rose Red) */}
+        <Link
+          href="/dashboard/calculator"
+          className="bg-surface-container-lowest dark:bg-surface-container-low p-4 sm:p-5 rounded-xl border border-border shadow-xs hover:shadow-md hover:border-rose-500/40 hover:-translate-y-0.5 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between"
+        >
+          <div className="absolute top-0 right-0 w-20 h-20 bg-rose-500/5 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="p-2.5 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 group-hover:scale-110 transition-transform">
+                <TrendingDown className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] sm:text-[11px] font-bold text-rose-600 dark:text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-full flex items-center gap-1">
+                <span>{language === 'bn' ? 'ব্যয়' : 'Expense'}</span>
+              </span>
+            </div>
+            <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-on-surface-variant truncate">
+              {language === 'bn' ? 'মোট ব্যয়' : 'Total Expenses'}
+            </p>
+            <p className="text-xl xl:text-2xl font-black text-rose-600 dark:text-rose-400 mt-1">
+              ৳{totalExpenses.toLocaleString()}
+            </p>
+          </div>
+          <p className="text-[10px] sm:text-[11px] text-rose-600/90 mt-2 font-bold truncate">
+            {language === 'bn' ? 'যাবতীয় খরচ' : 'Documented Expenses'}
+          </p>
+        </Link>
+
+        {/* Metric 3: Net Remaining Fund / Balance (Royal Sapphire / Indigo) */}
+        <Link
+          href="/dashboard/calculator"
+          className="bg-surface-container-lowest dark:bg-surface-container-low p-4 sm:p-5 rounded-xl border-2 border-indigo-500/30 shadow-xs hover:shadow-md hover:border-indigo-500/60 hover:-translate-y-0.5 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between"
+        >
+          <div className="absolute top-0 right-0 w-20 h-20 bg-indigo-500/5 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+                <Wallet className="w-5 h-5" />
+              </div>
+              <span className={`text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${
+                netBalance >= 0 ? 'text-emerald-600 bg-emerald-500/10' : 'text-rose-600 bg-rose-500/10'
+              }`}>
+                <span>{netBalance >= 0 ? (language === 'bn' ? 'উদ্বৃত্ত' : 'Surplus') : (language === 'bn' ? 'ঘাটতি' : 'Deficit')}</span>
+              </span>
+            </div>
+            <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-on-surface-variant truncate">
+              {language === 'bn' ? 'অবশিষ্ট তহবিল' : 'Net Balance'}
+            </p>
+            <p className={`text-xl xl:text-2xl font-black mt-1 ${
+              netBalance >= 0 ? 'text-indigo-600 dark:text-indigo-400' : 'text-rose-600 dark:text-rose-400'
+            }`}>
+              ৳{netBalance.toLocaleString()}
+            </p>
+          </div>
+          <p className="text-[10px] sm:text-[11px] text-indigo-600 dark:text-indigo-400 mt-2 font-bold truncate">
+            {language === 'bn' ? 'অনুদান - ব্যয়' : 'Income minus Expense'}
+          </p>
+        </Link>
+
+        {/* Metric 4: Total Members (Royal Sapphire Blue) */}
         <Link
           href="/dashboard/members"
           className="bg-surface-container-lowest dark:bg-surface-container-low p-4 sm:p-5 rounded-xl border border-border shadow-xs hover:shadow-md hover:border-blue-500/40 hover:-translate-y-0.5 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between"
@@ -103,44 +205,16 @@ export function DashboardOverviewClient({
             <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-on-surface-variant truncate">
               {language === 'bn' ? 'অনুমোদিত সদস্য' : 'Approved Members'}
             </p>
-            <p className="text-2xl xl:text-3xl font-black text-foreground mt-1">
+            <p className="text-xl xl:text-2xl font-black text-foreground mt-1">
               {stats.totalMembers}
             </p>
           </div>
           <p className="text-[10px] sm:text-[11px] text-on-surface-variant/80 mt-2 truncate">
-            {language === 'bn' ? 'অনুমোদিত সাধারণ সদস্য' : 'Verified Active Members'}
+            {language === 'bn' ? 'অনুমোদিত সদস্য' : 'Active Members'}
           </p>
         </Link>
 
-        {/* Metric 2: Total Donations (Emerald Growth Green) */}
-        <Link
-          href="/dashboard/donations"
-          className="bg-surface-container-lowest dark:bg-surface-container-low p-4 sm:p-5 rounded-xl border border-border shadow-xs hover:shadow-md hover:border-emerald-500/40 hover:-translate-y-0.5 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between"
-        >
-          <div className="absolute top-0 right-0 w-20 h-20 bg-emerald-500/5 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
-                <Heart className="w-5 h-5 text-emerald-600 fill-emerald-600" />
-              </div>
-              <span className="text-[10px] sm:text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full flex items-center gap-1">
-                <ArrowUpRight className="w-2.5 h-2.5" />
-                <span>{language === 'bn' ? 'তহবিল' : 'Fund'}</span>
-              </span>
-            </div>
-            <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-on-surface-variant truncate">
-              {language === 'bn' ? 'সংগৃহীত অনুদান' : 'Total Donations'}
-            </p>
-            <p className="text-2xl xl:text-3xl font-black text-foreground mt-1">
-              ৳{stats.totalDonations.toLocaleString()}
-            </p>
-          </div>
-          <p className="text-[10px] sm:text-[11px] text-growth-green mt-2 font-bold truncate">
-            {language === 'bn' ? '১০০% স্বচ্ছ হিসাব' : '100% Documented'}
-          </p>
-        </Link>
-
-        {/* Metric 3: Active Events (Warm Amber Gold) */}
+        {/* Metric 5: Active Events (Warm Amber Gold) */}
         <Link
           href="/dashboard/events"
           className="bg-surface-container-lowest dark:bg-surface-container-low p-4 sm:p-5 rounded-xl border border-border shadow-xs hover:shadow-md hover:border-amber-500/40 hover:-translate-y-0.5 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between"
@@ -152,13 +226,13 @@ export function DashboardOverviewClient({
                 <CalendarDays className="w-5 h-5" />
               </div>
               <span className="text-[10px] sm:text-[11px] font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full">
-                {language === 'bn' ? 'কার্যক্রম' : 'Events'}
+                {language === 'bn' ? 'ইভেন্ট' : 'Events'}
               </span>
             </div>
             <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-on-surface-variant truncate">
               {language === 'bn' ? 'আসন্ন ইভেন্ট' : 'Active Events'}
             </p>
-            <p className="text-2xl xl:text-3xl font-black text-foreground mt-1">
+            <p className="text-xl xl:text-2xl font-black text-foreground mt-1">
               {stats.activeEvents}
             </p>
           </div>
@@ -167,34 +241,7 @@ export function DashboardOverviewClient({
           </p>
         </Link>
 
-        {/* Metric 4: Reviews & Feedback (Royal Violet / Purple) */}
-        <Link
-          href="/dashboard/reviews"
-          className="bg-surface-container-lowest dark:bg-surface-container-low p-4 sm:p-5 rounded-xl border border-border shadow-xs hover:shadow-md hover:border-purple-500/40 hover:-translate-y-0.5 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between"
-        >
-          <div className="absolute top-0 right-0 w-20 h-20 bg-purple-500/5 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform">
-                <TrendingUp className="w-5 h-5" />
-              </div>
-              <span className="text-[10px] sm:text-[11px] font-bold text-purple-600 dark:text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded-full">
-                {language === 'bn' ? 'মতামত' : 'Reviews'}
-              </span>
-            </div>
-            <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-on-surface-variant truncate">
-              {language === 'bn' ? 'জনসাধারণের মতামত' : 'Public Reviews'}
-            </p>
-            <p className="text-2xl xl:text-3xl font-black text-foreground mt-1">
-              {stats.totalReviews}
-            </p>
-          </div>
-          <p className="text-[10px] sm:text-[11px] text-on-surface-variant/80 mt-2 truncate">
-            {language === 'bn' ? 'শুভাকাঙ্ক্ষীদের রিভিউ' : 'Feedback Received'}
-          </p>
-        </Link>
-
-        {/* Metric 5: Pending Member Approvals (Alert Red/Amber) */}
+        {/* Metric 6: Pending Member Approvals (Alert Amber) */}
         <Link
           href="/dashboard/members"
           className="bg-surface-container-lowest dark:bg-surface-container-low p-4 sm:p-5 rounded-xl border-2 border-amber-500/40 shadow-xs hover:shadow-md hover:border-amber-500/60 hover:-translate-y-0.5 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between"
@@ -206,13 +253,13 @@ export function DashboardOverviewClient({
                 <Clock className="w-5 h-5" />
               </div>
               <span className="text-[10px] sm:text-[11px] font-bold text-amber-600 dark:text-amber-400 bg-amber-500/20 px-2 py-0.5 rounded-full animate-pulse">
-                {language === 'bn' ? 'অপেক্ষাধীন' : 'Pending'}
+                {language === 'bn' ? 'পেন্ডিং' : 'Pending'}
               </span>
             </div>
             <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-on-surface-variant truncate">
-              {language === 'bn' ? 'অপেক্ষায় সদস্য' : 'Pending Approvals'}
+              {language === 'bn' ? 'অপেক্ষায় সদস্য' : 'Pending'}
             </p>
-            <p className="text-2xl xl:text-3xl font-black text-amber-600 dark:text-amber-400 mt-1">
+            <p className="text-xl xl:text-2xl font-black text-amber-600 dark:text-amber-400 mt-1">
               {stats.pendingMembers}
             </p>
           </div>
@@ -323,6 +370,23 @@ export function DashboardOverviewClient({
               </span>
             </h2>
             <div className="space-y-2.5">
+              <Link
+                href="/dashboard/calculator"
+                className="flex items-center justify-between p-3.5 rounded-xl border border-border hover:border-purple-500/40 bg-surface dark:bg-background transition-all text-xs sm:text-sm font-bold text-foreground group shadow-2xs"
+              >
+                <span className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-purple-500/10 text-purple-600">
+                    <Calculator className="w-4 h-4" />
+                  </div>
+                  <span>
+                    {language === 'bn'
+                      ? 'আয়-ব্যয় হিসাব ও ক্যালকুলেটর'
+                      : 'Financial Ledger & Calculator'}
+                  </span>
+                </span>
+                <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity text-purple-500" />
+              </Link>
+
               <Link
                 href="/dashboard/donations"
                 className="flex items-center justify-between p-3.5 rounded-xl border border-border hover:border-red-500/40 bg-surface dark:bg-background transition-all text-xs sm:text-sm font-bold text-foreground group shadow-2xs"

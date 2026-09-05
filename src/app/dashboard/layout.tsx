@@ -18,7 +18,8 @@ import {
   MessageSquare,
   Menu,
   X,
-  Layers
+  Layers,
+  Calculator
 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
@@ -44,6 +45,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: "/dashboard/content", icon: FileText, labelBn: "হোম কন্টেন্ট", labelEn: "Page Content" },
     { href: "/dashboard/media", icon: ImageIcon, labelBn: "মিডিয়া গ্যালারি", labelEn: "Media Library" },
     { href: "/dashboard/donations", icon: CircleDollarSign, labelBn: "অনুদান", labelEn: "Donations" },
+    { href: "/dashboard/calculator", icon: Calculator, labelBn: "হিসাব ও ব্যয় (ক্যালকুলেটর)", labelEn: "Ledger & Calculator" },
     { href: "/dashboard/reviews", icon: MessageSquare, labelBn: "রিভিউ / মতামত", labelEn: "Reviews" },
     { href: "/dashboard/activity", icon: Activity, labelBn: "অ্যাক্টিভিটি লগ", labelEn: "Activity Log" },
     { href: "/dashboard/roles", icon: Shield, labelBn: "রোলস", labelEn: "Roles" },
