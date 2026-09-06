@@ -29,6 +29,8 @@ export async function POST(request: Request) {
       size: data.size || '1.2 MB',
       tag: data.tag || 'GALLERY',
       isDoc: data.isDoc || false,
+      description: data.description || '',
+      date: data.date || '',
     });
 
     try {

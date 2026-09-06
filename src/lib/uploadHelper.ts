@@ -10,10 +10,14 @@ export function processBase64Image(dataUrl: string, prefix: string = 'img'): str
     return dataUrl;
   }
   try {
-    const match = dataUrl.match(/^data:image\/([a-zA-Z0-9+.-]+);base64,([\s\S]+)$/);
-    if (!match) return dataUrl;
+    const commaIndex = dataUrl.indexOf(',');
+    if (commaIndex === -1) return dataUrl;
 
-    let ext = match[1].toLowerCase();
+    const meta = dataUrl.substring(0, commaIndex);
+    const base64Data = dataUrl.substring(commaIndex + 1);
+
+    const typeMatch = meta.match(/data:image\/([a-zA-Z0-9+.-]+);base64/i);
+    let ext = typeMatch ? typeMatch[1].toLowerCase() : 'jpg';
     if (ext === 'jpeg') ext = 'jpg';
     if (ext === 'svg+xml') ext = 'svg';
 
@@ -24,7 +28,7 @@ export function processBase64Image(dataUrl: string, prefix: string = 'img'): str
 
     const filename = `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}.${ext}`;
     const filePath = path.join(uploadsDir, filename);
-    const buffer = Buffer.from(match[2], 'base64');
+    const buffer = Buffer.from(base64Data, 'base64');
     fs.writeFileSync(filePath, buffer);
     return `/uploads/${filename}`;
   } catch (err) {

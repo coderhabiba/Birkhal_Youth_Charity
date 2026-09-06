@@ -24,6 +24,9 @@ export async function PUT(
         tag: body.tag,
         url: imageUrl,
         isDoc: body.isDoc ?? false,
+        description: body.description ?? '',
+        date: body.date ?? '',
+        ...(body.size ? { size: body.size } : {}),
       },
       { new: true }
     );

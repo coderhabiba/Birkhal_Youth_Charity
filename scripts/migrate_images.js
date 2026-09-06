@@ -13,14 +13,18 @@ function saveBase64(dataUrl, filenamePrefix) {
   if (!dataUrl || typeof dataUrl !== 'string' || !dataUrl.startsWith('data:image')) {
     return null;
   }
-  const match = dataUrl.match(/^data:image\/([a-zA-Z0-9+.-]+);base64,(.+)$/s);
-  if (!match) return null;
+  const commaIndex = dataUrl.indexOf(',');
+  if (commaIndex === -1) return null;
 
-  let ext = match[1].toLowerCase();
+  const meta = dataUrl.substring(0, commaIndex);
+  const base64Data = dataUrl.substring(commaIndex + 1);
+
+  const typeMatch = meta.match(/data:image\/([a-zA-Z0-9+.-]+);base64/i);
+  let ext = typeMatch ? typeMatch[1].toLowerCase() : 'jpg';
   if (ext === 'jpeg') ext = 'jpg';
   if (ext === 'svg+xml') ext = 'svg';
 
-  const buffer = Buffer.from(match[2], 'base64');
+  const buffer = Buffer.from(base64Data, 'base64');
   const filename = `${filenamePrefix}.${ext}`;
   const filePath = path.join(uploadsDir, filename);
   fs.writeFileSync(filePath, buffer);
