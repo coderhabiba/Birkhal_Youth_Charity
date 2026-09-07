@@ -5,6 +5,7 @@ import Event from '@/models/Event';
 import ActivityLog from '@/models/ActivityLog';
 import { revalidatePath } from 'next/cache';
 import { processBase64Image } from '@/lib/uploadHelper';
+import { invalidateCache } from '@/lib/cache';
 
 export async function updateEventApprovalStatus(
   id: string,
@@ -30,6 +31,8 @@ export async function updateEventApprovalStatus(
 
     revalidatePath('/dashboard/events');
     revalidatePath('/events');
+    invalidateCache('dashboard-events');
+    invalidateCache('api-events');
     return { success: true, event: JSON.parse(JSON.stringify(event)) };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -69,6 +72,8 @@ export async function updateEventDetails(
 
     revalidatePath('/dashboard/events');
     revalidatePath('/events');
+    invalidateCache('dashboard-events');
+    invalidateCache('api-events');
     return { success: true, event: JSON.parse(JSON.stringify(event)) };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -107,6 +112,8 @@ export async function createEventAction(data: {
 
     revalidatePath('/dashboard/events');
     revalidatePath('/events');
+    invalidateCache('dashboard-events');
+    invalidateCache('api-events');
     return { success: true, event: JSON.parse(JSON.stringify(event)) };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -130,6 +137,8 @@ export async function deleteEvent(id: string) {
 
     revalidatePath('/dashboard/events');
     revalidatePath('/events');
+    invalidateCache('dashboard-events');
+    invalidateCache('api-events');
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };

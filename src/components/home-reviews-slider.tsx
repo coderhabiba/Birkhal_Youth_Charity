@@ -29,7 +29,7 @@ export function HomeReviewsSlider({
   settings?: Record<string, string>;
 }) {
   const { language } = useLanguage();
-  const [reviews] = useState<any[]>(initialReviews || []);
+  const reviews = initialReviews || [];
   const [viewMode, setViewMode] = useState<"marquee" | "carousel">("marquee");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);

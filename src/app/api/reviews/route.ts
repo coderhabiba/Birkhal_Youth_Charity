@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import connectToDatabase from '@/lib/mongodb';
 import Review from '@/models/Review';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
@@ -14,9 +16,13 @@ export async function GET(req: Request) {
       query = { status };
     }
 
-    const reviews = await Review.find(query).sort({ createdAt: -1 });
+    const reviews = await Review.find(query)
+      .select('-image')
+      .sort({ createdAt: -1 })
+      .lean();
     return NextResponse.json(reviews);
   } catch (error) {
+    console.error('Error fetching reviews:', error);
     return NextResponse.json({ error: 'Failed to fetch reviews' }, { status: 500 });
   }
 }

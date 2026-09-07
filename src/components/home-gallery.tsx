@@ -50,80 +50,11 @@ export function HomeGallery({
     (language === 'bn'
       ? 'বীরখাল সমাজ কল্যাণ যুব সংগঠনের মাঠপর্যায়ের সমাজসেবা, ত্রাণ বিতরণ ও উন্নয়নমূলক কার্যক্রমের বাস্তব চিত্র।'
       : 'A visual journey capturing the spirit, unity, and ground-level charity works of our youth volunteers.');
-  // Fallback items using real ground-level activity photos with matching titles & tags
-  const defaultGallery = [
-    {
-      _id: 'g-0',
-      title: 'ফটো ও কার্যক্রম অ্যালবাম - আমাদের সমাজসেবার মুহূর্তসমূহ',
-      url: '/gallery-sample.svg',
-      tag: 'ACTIVITIES',
-    },
-    {
-      _id: 'g-1',
-      title: 'বীরখাল সমাজ কল্যাণ যুব সংগঠনের ঐক্যবদ্ধ সমাজসেবা কার্যক্রম',
-      url: '/up-1.jpeg',
-      tag: 'ACTIVITIES',
-    },
-    {
-      _id: 'g-2',
-      title: 'বীরখাল সবুজায়ন ও পরিবেশ সুরক্ষা বৃক্ষরোপণ কর্মসূচি',
-      url: '/ai_plantation.jpg',
-      tag: 'PLANTATION',
-    },
-    {
-      _id: 'g-3',
-      title:
-        'দরিদ্র ও মেধাবী শিক্ষার্থীদের মাঝে শিক্ষাসামগ্রী ও মেধা বৃত্তি বিতরণ',
-      url: '/ai_education.jpg',
-      tag: 'EDUCATION',
-    },
-    {
-      _id: 'g-4',
-      title: 'বন্যা ও দুর্যোগকালীন জরুরি খাদ্য ও ত্রাণ সামগ্রী বিতরণ',
-      url: '/ai_relief.jpg',
-      tag: 'RELIEF',
-    },
-    {
-      _id: 'g-5',
-      title: 'বিনামূল্যে জরুরি স্বাস্থ্যসেবা ও রক্তের গ্রুপ নির্ণয় কর্মসূচি',
-      url: '/ai_medical.jpg',
-      tag: 'RELIEF',
-    },
-  ];
 
-  const normalizeGalleryImageUrl = (
-    value?: string,
-    fallback = '/up-1.jpeg',
-  ) => {
-    if (!value) return fallback;
+  // Only use the actual fetched media list, do not use fallback data
+  const rawList = mediaList || [];
 
-    const legacyMap: Record<string, string> = {
-      '/support1.jpeg': '/up-1.jpeg',
-      '/support2.jpeg': '/ai_relief.jpg',
-      '/support3.jpeg': '/ai_education.jpg',
-      '/support4.jpeg': '/ai_plantation.jpg',
-      '/about-banner.jpg': '/ai_medical.jpg',
-      '/charity_banner.jpg': '/ai_education.jpg',
-      '/donation-banner.jpg': '/ai_relief.jpg',
-    };
-
-    return legacyMap[value] || value;
-  };
-
-  const rawList =
-    mediaList && mediaList.length > 0 ? mediaList : defaultGallery;
-  const sourceMedia = rawList.filter(
-    (m: any) =>
-      !m.title?.includes('যুবসমাজ উন্নয়ন ও দক্ষতা প্রশিক্ষণ') &&
-      !m.title?.includes('দক্ষতা প্রশিক্ষণ'),
-  );
-  const uniqueMedia = Array.from(
-    new Map(
-      sourceMedia.map(m => [normalizeGalleryImageUrl(m.url), m]),
-    ).values(),
-  );
-
-  const allGalleryItems: GalleryItem[] = uniqueMedia.map((m: any) => {
+  const allGalleryItems: GalleryItem[] = rawList.map((m: any) => {
     const rawTag = (m.tag || '').toLowerCase();
     const titleText = (m.title || '').toLowerCase();
 
@@ -152,44 +83,6 @@ export function HomeGallery({
       titleText.includes('সবুজায়ন')
     ) {
       catId = 'plantation';
-    }
-
-    // Precise image resolution to match the tagline and activity type
-    let matchedUrl = normalizeGalleryImageUrl(m.url, '/up-1.jpeg');
-    if (
-      m.title?.includes('বৃক্ষরোপণ') ||
-      m.title?.includes('সবুজায়ন') ||
-      m.tag === 'PLANTATION' ||
-      matchedUrl === '/support4.jpeg'
-    ) {
-      matchedUrl = '/ai_plantation.jpg';
-    } else if (
-      m.title?.includes('শিক্ষা') ||
-      m.title?.includes('শিক্ষাসামগ্রী') ||
-      m.tag === 'EDUCATION' ||
-      matchedUrl === '/support3.jpeg'
-    ) {
-      matchedUrl = '/ai_education.jpg';
-    } else if (
-      m.title?.includes('ত্রাণ') ||
-      m.title?.includes('বন্যা') ||
-      m.tag === 'RELIEF' ||
-      matchedUrl === '/support2.jpeg'
-    ) {
-      matchedUrl = '/ai_relief.jpg';
-    } else if (
-      m.title?.includes('স্বাস্থ্য') ||
-      m.title?.includes('চিকিৎসা') ||
-      m.title?.includes('মেডিকেল')
-    ) {
-      matchedUrl = '/ai_medical.jpg';
-    } else if (
-      m.title?.includes('যুবসমাজ') ||
-      m.title?.includes('দক্ষতা') ||
-      m.tag === 'YOUTH' ||
-      matchedUrl === '/support1.jpeg'
-    ) {
-      matchedUrl = '/up-1.jpeg';
     }
 
     const rawTitle =
@@ -267,10 +160,10 @@ export function HomeGallery({
       category: catId,
       categoryNameBn: tagBn,
       categoryNameEn: tagEn,
-      url: matchedUrl,
-      date: m.createdAt
+      url: m.url,
+      date: m.date || (m.createdAt
         ? new Date(m.createdAt).getFullYear().toString()
-        : new Date().getFullYear().toString(),
+        : new Date().getFullYear().toString()),
     };
   });
 
@@ -339,34 +232,21 @@ export function HomeGallery({
           </p>
         </div>
       ) : (
-        /* Modern Mosaic Gallery Grid */
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 auto-rows-[250px] grid-flow-dense">
+        /* Uniform Gallery Grid */
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {filteredItems.map((item, idx) => {
-            // Determine mosaic spanning based on index to create a beautiful varied grid
-            const isLarge = idx % 7 === 0;
-            const isTall = idx % 5 === 2;
-            const isWide = idx % 5 === 4;
-
             return (
               <div
                 key={item.id || idx}
                 onClick={() => setSelectedImage(item)}
-                className={`group relative bg-surface-container-lowest dark:bg-surface-container-low overflow-hidden cursor-pointer shadow-xs hover:shadow-xl transition-all duration-500 rounded-xl ${
-                  isLarge
-                    ? 'sm:col-span-2 sm:row-span-2'
-                    : isTall
-                      ? 'sm:row-span-2'
-                      : isWide
-                        ? 'sm:col-span-2'
-                        : 'col-span-1 row-span-1'
-                }`}
+                className="group relative bg-surface-container-lowest dark:bg-surface-container-low overflow-hidden cursor-pointer shadow-xs hover:shadow-xl transition-all duration-500 rounded-xl aspect-[4/3] w-full"
               >
                 {/* Image */}
                 <Image
                   src={item.url}
                   alt={item.title}
                   fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   unoptimized={(item.url || '').startsWith('data:')}
                   className="object-cover object-top group-hover:scale-110 transition-transform duration-700 ease-in-out"
                 />

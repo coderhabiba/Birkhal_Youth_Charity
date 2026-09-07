@@ -55,7 +55,7 @@ export function HomeClient({
   eventsList?: any[];
 }) {
   const { language } = useLanguage();
-  const [reviews] = useState<any[]>(initialReviews);
+  const reviews = initialReviews;
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');

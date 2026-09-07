@@ -13,14 +13,14 @@ export const revalidate = 60; // ISR: re-fetch data every 60 seconds in backgrou
 async function getHomeData() {
   await connectToDatabase();
 
-  // Run queries in parallel for ultra-fast load time
+  // Run queries in parallel for ultra-fast load time, with generous limits to avoid DB timeouts
   const [rawReviews, rawCommittee, rawMembers, rawSettings, rawMedia, rawEvents] = await Promise.all([
-    Review.find({ status: 'approved' }).sort({ createdAt: -1 }).lean(),
-    Committee.find().sort({ createdAt: 1 }).lean(),
-    Member.find({ status: 'approved' }).sort({ createdAt: -1 }).lean(),
+    Review.find({ status: 'approved' }).sort({ createdAt: -1 }).limit(200).lean(),
+    Committee.find().sort({ createdAt: 1 }).limit(100).lean(),
+    Member.find({ status: 'approved' }).sort({ createdAt: -1 }).limit(200).lean(),
     Setting.find().lean(),
-    Media.find({ isDoc: false }).sort({ createdAt: -1 }).limit(12).lean(),
-    Event.find({ status: { $in: ['upcoming', 'ongoing'] } }).sort({ date: 1 }).lean()
+    Media.find({ isDoc: false }).sort({ createdAt: -1 }).limit(200).lean(),
+    Event.find({ status: { $in: ['upcoming', 'ongoing'] } }).sort({ date: 1 }).limit(100).lean()
   ]);
 
   const initialReviews = rawReviews.map((r: any) => ({

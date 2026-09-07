@@ -4,13 +4,18 @@ import Event from '@/models/Event';
 import ActivityLog from '@/models/ActivityLog';
 import { revalidatePath } from 'next/cache';
 import { processBase64Image } from '@/lib/uploadHelper';
+import { cachedQuery, invalidateCache } from '@/lib/cache';
 
 export const dynamic = 'force-dynamic';
 
+async function getEvents() {
+  await connectToDatabase();
+  return await Event.find().sort({ date: 1 }).limit(200).lean();
+}
+
 export async function GET() {
   try {
-    await connectToDatabase();
-    const events = await Event.find().sort({ date: 1 }).lean();
+    const events = await cachedQuery('api-events', getEvents, 30_000);
     return NextResponse.json(events);
   } catch (error) {
     return NextResponse.json({ error: "Failed to fetch events" }, { status: 500 });
@@ -44,6 +49,8 @@ export async function POST(request: Request) {
     revalidatePath("/");
     revalidatePath("/events");
     revalidatePath("/dashboard/events");
+    invalidateCache('dashboard-events');
+    invalidateCache('api-events');
 
     return NextResponse.json(newEvent, { status: 201 });
   } catch (error) {

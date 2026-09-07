@@ -3,6 +3,8 @@ import connectToDatabase from '@/lib/mongodb';
 import Media from '@/models/Media';
 import ActivityLog from '@/models/ActivityLog';
 import { processBase64Image } from '@/lib/uploadHelper';
+import { invalidateCache } from '@/lib/cache';
+import { revalidatePath } from 'next/cache';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,6 +46,11 @@ export async function PUT(
       });
     } catch (e) {}
 
+    invalidateCache('media-all');
+    invalidateCache('home-page-data');
+    revalidatePath('/');
+    revalidatePath('/dashboard/media');
+
     return NextResponse.json(updatedMedia);
   } catch (error: any) {
     return NextResponse.json({ error: error.message || "Failed to update media" }, { status: 500 });
@@ -71,6 +78,11 @@ export async function DELETE(
         details: `Deleted media item: ${deletedMedia.title}`
       });
     } catch (e) {}
+
+    invalidateCache('media-all');
+    invalidateCache('home-page-data');
+    revalidatePath('/');
+    revalidatePath('/dashboard/media');
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

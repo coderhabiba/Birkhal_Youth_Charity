@@ -4,6 +4,7 @@ import Event from '@/models/Event';
 import ActivityLog from '@/models/ActivityLog';
 import { revalidatePath } from 'next/cache';
 import { processBase64Image } from '@/lib/uploadHelper';
+import { invalidateCache } from '@/lib/cache';
 
 export const dynamic = 'force-dynamic';
 
@@ -37,6 +38,8 @@ export async function PUT(
     revalidatePath("/");
     revalidatePath("/events");
     revalidatePath("/dashboard/events");
+    invalidateCache('dashboard-events');
+    invalidateCache('api-events');
 
     return NextResponse.json({ success: true, event: updatedEvent });
   } catch (error: any) {
@@ -69,6 +72,8 @@ export async function DELETE(
     revalidatePath("/");
     revalidatePath("/events");
     revalidatePath("/dashboard/events");
+    invalidateCache('dashboard-events');
+    invalidateCache('api-events');
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

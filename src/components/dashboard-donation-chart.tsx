@@ -384,9 +384,9 @@ export function DashboardDonationChart({ donations = [] }: { donations?: Donatio
 
               {/* Line Gradient */}
               <linearGradient id="donationLineGradient" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#059669" />
-                <stop offset="50%" stopColor="#2563EB" />
-                <stop offset="100%" stopColor="#F59E0B" />
+                <stop offset="0%" stopColor="#10B981" />
+                <stop offset="50%" stopColor="#3B82F6" />
+                <stop offset="100%" stopColor="#8B5CF6" />
               </linearGradient>
 
               {/* Glow Filter */}
@@ -431,7 +431,7 @@ export function DashboardDonationChart({ donations = [] }: { donations?: Donatio
               d={linePath} 
               fill="none" 
               stroke="url(#donationLineGradient)" 
-              strokeWidth="1.5" 
+              strokeWidth="0.8" 
               strokeLinecap="round" 
               strokeLinejoin="round"
               filter="url(#glow)"
