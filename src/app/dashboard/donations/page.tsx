@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Filter, TrendingUp, Calendar, Users, Download, HeartHandshake, Trash2, Edit, Search, X, Check, FileSpreadsheet } from "lucide-react";
+import { Plus, Filter, TrendingUp, Calendar, Users, Download, HeartHandshake, Trash2, Edit, Search, X, Check, FileSpreadsheet, Printer } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 import { ConfirmModal } from "@/components/confirm-modal";
+import { DonationReceipt } from "@/components/donation-receipt";
 
 export default function DonationsAnalyticsPage() {
   const { language } = useLanguage();
@@ -12,6 +13,7 @@ export default function DonationsAnalyticsPage() {
   const [adding, setAdding] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editingDonation, setEditingDonation] = useState<any | null>(null);
+  const [receiptDonation, setReceiptDonation] = useState<any | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -457,6 +459,13 @@ export default function DonationsAnalyticsPage() {
                     <td className="p-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <button
+                          onClick={() => setReceiptDonation(trx)}
+                          className="p-1.5 bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs font-bold cursor-pointer rounded-lg"
+                          title={language === "bn" ? "রসিদ দেখুন" : "View Receipt"}
+                        >
+                          <Printer className="w-3.5 h-3.5" />
+                        </button>
+                        <button
                           onClick={() => setEditingDonation(trx)}
                           className="p-1.5 bg-surface-variant hover:bg-surface-variant/80 text-foreground text-xs font-bold cursor-pointer rounded-lg"
                           title="Edit"
@@ -479,6 +488,33 @@ export default function DonationsAnalyticsPage() {
           </table>
         </div>
       </div>
+
+      {/* Receipt Modal */}
+      {receiptDonation && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="bg-surface-container-lowest dark:bg-surface-container-low w-full max-w-4xl border border-border shadow-2xl p-6 rounded-xl my-8 relative max-h-[90vh] overflow-y-auto">
+            <button 
+              onClick={() => setReceiptDonation(null)} 
+              className="absolute top-4 right-4 text-on-surface-variant hover:text-foreground bg-surface-variant p-2 rounded-full cursor-pointer z-10"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <div className="mt-4">
+              <DonationReceipt 
+                donation={{
+                  id: receiptDonation._id ? receiptDonation._id.substring(receiptDonation._id.length - 8).toUpperCase() : `TRX-${Date.now().toString().slice(-6)}`,
+                  donorName: receiptDonation.donorName,
+                  amount: Number(receiptDonation.amount),
+                  date: receiptDonation.date,
+                  paymentMethod: receiptDonation.transactionId ? "Bank/Mobile Banking" : "Cash",
+                  transactionId: receiptDonation.transactionId,
+                  purpose: receiptDonation.category
+                }} 
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modern Confirm Delete Modal */}
       <ConfirmModal

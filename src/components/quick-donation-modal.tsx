@@ -20,6 +20,7 @@ import {
   AlertCircle
 } from "lucide-react";
 import Image from "next/image";
+import { DonationReceipt } from "@/components/donation-receipt";
 
 export function QuickDonationModal({
   isOpen,
@@ -40,8 +41,10 @@ export function QuickDonationModal({
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [receiptData, setReceiptData] = useState<{ id: string; date: string } | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
@@ -131,6 +134,10 @@ export function QuickDonationModal({
       });
 
       if (res.ok) {
+        setReceiptData({
+          id: `TRX-${Date.now().toString().slice(-6)}`,
+          date: new Date().toLocaleDateString('en-GB')
+        });
         setSuccess(true);
       } else {
         setErrorMsg(language === "bn" ? "তথ্য সংরক্ষণে সমস্যা হয়েছে। পুনরায় চেষ্টা করুন।" : "Failed to submit donation info. Please try again.");
@@ -178,18 +185,35 @@ export function QuickDonationModal({
           {/* Modal Body */}
           <div className="p-6 space-y-6">
           {success ? (
-            <div className="text-center py-8 space-y-4 animate-in zoom-in-95">
+            <div className="text-center py-4 space-y-4 animate-in zoom-in-95">
               <div className="w-16 h-16 bg-growth-green/10 text-growth-green mx-auto flex items-center justify-center rounded-full">
                 <CheckCircle2 className="w-10 h-10" />
               </div>
               <h4 className="font-headline-md text-xl font-bold text-foreground">
                 {language === "bn" ? "জাযাকাল্লাহু খাইরান! আপনার অনুদান তথ্য গৃহীত হয়েছে।" : "Thank You! Donation Information Received."}
               </h4>
-              <p className="text-xs sm:text-sm text-on-surface-variant max-w-sm mx-auto">
+              <p className="text-xs sm:text-sm text-on-surface-variant max-w-sm mx-auto mb-4">
                 {language === "bn"
-                  ? "বীরখাল সমাজ কল্যাণ যুব সংগঠনের পক্ষ থেকে আপনাকে আন্তরিক মোবারকবাদ। অনুদানটি যাচাই করে ডোনেশন তালিকায় অন্তর্ভুক্ত করা হবে।"
-                  : "We deeply appreciate your contribution. Your donation will be verified and added to the official record."}
+                  ? "বীরখাল সমাজ কল্যাণ যুব সংগঠনের পক্ষ থেকে আপনাকে আন্তরিক মোবারকবাদ। অনুদানটি যাচাই করে ডোনেশন তালিকায় অন্তর্ভুক্ত করা হবে। নিচে আপনার রসিদ দেওয়া হলো।"
+                  : "We deeply appreciate your contribution. Your donation will be verified and added to the official record. Below is your receipt."}
               </p>
+              
+              <div className="text-left mt-6 mb-6">
+                {receiptData && (
+                  <DonationReceipt 
+                    donation={{
+                      id: receiptData.id,
+                      donorName: donorName,
+                      amount: Number(amount),
+                      date: receiptData.date,
+                      paymentMethod: selectedMethod.toUpperCase(),
+                      transactionId: trxId,
+                      purpose: category
+                    }} 
+                  />
+                )}
+              </div>
+
               <button
                 onClick={() => { setSuccess(false); onClose(); }}
                 className="bg-growth-green hover:bg-[#236026] text-white font-bold px-6 py-2.5 text-xs uppercase tracking-wider cursor-pointer rounded-xl"
