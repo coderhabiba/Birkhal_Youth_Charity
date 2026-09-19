@@ -18,8 +18,13 @@
 /out/
 /vps_key
 
+# hosting setup
+.setup-ssh
+
+
 # production
 /build
+
 
 # misc
 .DS_Store
