@@ -18,7 +18,7 @@ const DonationEntrySchema: Schema = new Schema({
   category: { type: String, default: 'General' },
   mobileNumber: { type: String, required: false, default: '' },
   transactionId: { type: String, required: false, default: '' },
-  status: { type: String, enum: ['Completed', 'Pending'], default: 'Completed' },
+  status: { type: String, enum: ['Completed', 'Pending'], default: 'Pending' },
   createdAt: { type: Date, default: Date.now },
 });
 

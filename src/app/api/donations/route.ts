@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       category: data.category || 'General',
       mobileNumber: data.mobileNumber ? String(data.mobileNumber).trim() : '',
       transactionId: data.transactionId ? String(data.transactionId).trim() : '',
-      status: data.status || 'Completed',
+      status: data.status || 'Pending',
     });
 
     try {
