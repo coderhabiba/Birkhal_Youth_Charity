@@ -20,10 +20,11 @@
 
 # hosting setup
 .setup-ssh
-
+index.js
 
 # production
 /build
+
 
 
 # misc
