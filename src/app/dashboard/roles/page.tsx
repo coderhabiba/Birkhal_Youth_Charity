@@ -283,7 +283,7 @@ export default function RoleManagementPage() {
                     </h4>
 
                     <div className="overflow-x-auto rounded-xl border border-border">
-                      <table className="w-full text-left border-collapse">
+                      <table className="w-full text-left border-collapse whitespace-nowrap min-w-max">
                         <thead>
                           <tr className="border-b border-border bg-surface dark:bg-background">
                             <th className="py-2.5 px-4 font-bold text-xs text-foreground uppercase tracking-wider">{language === "bn" ? "মডিউল" : "Module"}</th>

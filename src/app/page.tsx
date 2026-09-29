@@ -63,33 +63,16 @@ async function getHomeData() {
 }
 
 export default async function Home() {
-  let initialReviews: any[] = [];
-  let committeeMembers: any[] = [];
-  let generalMembers: any[] = [];
-  let galleryMedia: any[] = [];
-  let eventsList: any[] = [];
-  let settingsMap: Record<string, string> = {};
-
-  try {
-    const data = await cachedQuery('home-page-data', getHomeData, 60_000);
-    initialReviews = data.initialReviews;
-    committeeMembers = data.committeeMembers;
-    generalMembers = data.generalMembers;
-    galleryMedia = data.galleryMedia;
-    eventsList = data.eventsList;
-    settingsMap = data.settingsMap;
-  } catch (err) {
-    console.error("Failed to load home page data from MongoDB:", err);
-  }
+  const data = await cachedQuery('home-page-data', getHomeData, 60_000);
 
   return (
     <HomeClient 
-      initialReviews={initialReviews} 
-      committeeMembers={committeeMembers}
-      generalMembers={generalMembers}
-      settings={settingsMap}
-      mediaList={galleryMedia}
-      eventsList={eventsList}
+      initialReviews={data.initialReviews} 
+      committeeMembers={data.committeeMembers}
+      generalMembers={data.generalMembers}
+      settings={data.settingsMap}
+      mediaList={data.galleryMedia}
+      eventsList={data.eventsList}
     />
   );
 }

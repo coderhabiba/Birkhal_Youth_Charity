@@ -243,7 +243,7 @@ export function DashboardOverviewClient({
 
         {/* Metric 6: Pending Member Approvals (Alert Amber) */}
         <Link
-          href="/dashboard/members"
+          href="/dashboard/members?status=pending"
           className="bg-surface-container-lowest dark:bg-surface-container-low p-4 sm:p-5 rounded-xl border-2 border-amber-500/40 shadow-xs hover:shadow-md hover:border-amber-500/60 hover:-translate-y-0.5 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between"
         >
           <div className="absolute top-0 right-0 w-20 h-20 bg-amber-500/10 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>

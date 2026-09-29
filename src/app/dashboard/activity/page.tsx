@@ -191,8 +191,8 @@ export default function ActivityLogPage() {
       {/* Activity List Table */}
       <div className="bg-surface-container-low dark:bg-surface-container-lowest shadow-sm border border-border overflow-hidden backdrop-blur-md rounded-xl">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
+          <table className="w-full text-left border-collapse block md:table">
+            <thead className="hidden md:table-header-group">
               <tr className="bg-surface dark:bg-background border-b border-border text-xs uppercase font-bold text-on-surface-variant">
                 <th className="p-4">{language === "bn" ? "ইউজার" : "User"}</th>
                 <th className="p-4">{language === "bn" ? "অ্যাকশন" : "Action"}</th>
@@ -201,33 +201,46 @@ export default function ActivityLogPage() {
                 <th className="p-4 text-right">{language === "bn" ? "সময়" : "Time"}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-border block md:table-row-group">
               {loading ? (
-                <tr>
-                  <td colSpan={5} className="p-8 text-center text-on-surface-variant">
+                <tr className="block md:table-row">
+                  <td colSpan={5} className="p-8 text-center text-on-surface-variant block md:table-cell">
                     <Loader2 className="w-6 h-6 animate-spin mx-auto text-growth-green mb-1" />
                     <span className="text-xs">{language === "bn" ? "লগ লোড হচ্ছে..." : "Loading logs..."}</span>
                   </td>
                 </tr>
               ) : filteredLogs.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="p-8 text-center text-on-surface-variant text-xs">
+                <tr className="block md:table-row">
+                  <td colSpan={5} className="p-8 text-center text-on-surface-variant text-xs block md:table-cell">
                     {language === "bn" ? "কোনো অ্যাক্টিভিটি পাওয়া যায়নি।" : "No activity logs found."}
                   </td>
                 </tr>
               ) : (
                 filteredLogs.map((log) => (
-                  <tr key={log._id || log.id} className="hover:bg-surface/50 transition-colors text-sm">
-                    <td className="p-4 text-xs font-bold text-foreground">{log.user}</td>
-                    <td className="p-4">
+                  <tr key={log._id || log.id} className="hover:bg-surface/50 transition-colors text-sm block md:table-row border border-border md:border-0 rounded-xl md:rounded-none mb-4 md:mb-0 p-2 md:p-0 bg-surface md:bg-transparent">
+                    <td className="p-3 md:p-4 text-xs font-bold text-foreground flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "ইউজার:" : "User:"}</span>
+                      <span className="text-right md:text-left">{log.user}</span>
+                    </td>
+                    <td className="p-3 md:p-4 flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "অ্যাকশন:" : "Action:"}</span>
                       <span className={`px-2 py-0.5 text-[11px] font-bold rounded-md ${getActionColor(log.action)}`}>
                         {getActionLabel(log.action)}
                       </span>
                     </td>
-                    <td className="p-4 text-xs font-bold text-on-surface-variant">{log.module}</td>
-                    <td className="p-4 text-xs text-foreground">{log.details}</td>
-                    <td className="p-4 text-xs text-on-surface-variant text-right whitespace-nowrap">
-                      {log.createdAt ? format(new Date(log.createdAt), "dd MMM yyyy, hh:mm a") : "N/A"}
+                    <td className="p-3 md:p-4 text-xs font-bold text-on-surface-variant flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "মডিউল:" : "Module:"}</span>
+                      <span className="text-right md:text-left">{log.module}</span>
+                    </td>
+                    <td className="p-3 md:p-4 text-xs text-foreground flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "বিবরণ:" : "Details:"}</span>
+                      <span className="text-right md:text-left">{log.details}</span>
+                    </td>
+                    <td className="p-3 md:p-4 text-xs text-on-surface-variant text-right md:whitespace-nowrap flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "সময়:" : "Time:"}</span>
+                      <span className="text-right md:text-left">
+                        {log.createdAt ? format(new Date(log.createdAt), "dd MMM yyyy, hh:mm a") : "N/A"}
+                      </span>
                     </td>
                   </tr>
                 ))

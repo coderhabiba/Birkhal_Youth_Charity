@@ -165,8 +165,8 @@ export function DashboardReviewsClient() {
       {/* Reviews List */}
       <div className="bg-surface-container-lowest dark:bg-surface-container-low shadow-sm border border-surface-variant dark:border-border overflow-hidden backdrop-blur-md rounded-xl">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
+          <table className="w-full text-left border-collapse block md:table">
+            <thead className="hidden md:table-header-group">
               <tr className="bg-surface dark:bg-background border-b border-surface-variant dark:border-border text-on-surface-variant dark:text-on-surface-variant text-sm uppercase tracking-wider">
                 <th className="p-4 font-semibold">{language === "bn" ? "ব্যবহারকারী" : "User"}</th>
                 <th className="p-4 font-semibold">{language === "bn" ? "রেটিং" : "Rating"}</th>
@@ -175,40 +175,42 @@ export function DashboardReviewsClient() {
                 <th className="p-4 font-semibold text-right">{language === "bn" ? "অ্যাকশন" : "Actions"}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-surface-variant dark:divide-border">
+            <tbody className="divide-y divide-surface-variant dark:divide-border block md:table-row-group">
               {loading ? (
-                <tr>
-                  <td colSpan={5} className="p-8 text-center text-on-surface-variant">
+                <tr className="block md:table-row">
+                  <td colSpan={5} className="p-8 text-center text-on-surface-variant block md:table-cell">
                     {language === "bn" ? "লোড হচ্ছে..." : "Loading..."}
                   </td>
                 </tr>
               ) : filteredReviews.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="p-8 text-center text-on-surface-variant">
+                <tr className="block md:table-row">
+                  <td colSpan={5} className="p-8 text-center text-on-surface-variant block md:table-cell">
                     {language === "bn" ? "কোনো মতামত পাওয়া যায়নি।" : "No reviews found."}
                   </td>
                 </tr>
               ) : (
                 filteredReviews.map((review: any) => (
-                  <tr key={review._id} className="hover:bg-surface dark:hover:bg-background/50 transition-colors">
-                    <td className="p-4">
+                  <tr key={review._id} className="hover:bg-surface dark:hover:bg-background/50 transition-colors block md:table-row border border-border md:border-0 rounded-xl md:rounded-none mb-4 md:mb-0 p-2 md:p-0 bg-surface md:bg-transparent">
+                    <td className="p-3 md:p-4 flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "ব্যবহারকারী:" : "User:"}</span>
                       <div className="flex items-center gap-3">
                         {review.image ? (
-                          <div className="w-9 h-9 rounded-lg overflow-hidden shrink-0 border border-border bg-surface-variant">
+                          <div className="w-9 h-9 rounded-lg overflow-hidden shrink-0 border border-border bg-surface-variant hidden md:block">
                             <img src={review.image} alt={review.name} className="w-full h-full object-cover object-top" />
                           </div>
                         ) : (
-                          <div className="w-9 h-9 rounded-lg bg-growth-green/10 text-growth-green font-bold flex items-center justify-center text-xs shrink-0 border border-growth-green/20">
+                          <div className="w-9 h-9 rounded-lg bg-growth-green/10 text-growth-green font-bold flex items-center justify-center text-xs shrink-0 border border-growth-green/20 hidden md:flex">
                             {review.name?.charAt(0) || "U"}
                           </div>
                         )}
-                        <div>
+                        <div className="text-right md:text-left">
                           <div className="font-bold text-foreground">{review.name}</div>
                           <div className="text-xs text-on-surface-variant dark:text-on-surface-variant">{review.designation || "N/A"}</div>
                         </div>
                       </div>
                     </td>
-                    <td className="p-4">
+                    <td className="p-3 md:p-4 flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "রেটিং:" : "Rating:"}</span>
                       <div className="flex gap-0.5">
                         {[...Array(5)].map((_, i) => (
                           <Star
@@ -220,10 +222,12 @@ export function DashboardReviewsClient() {
                         ))}
                       </div>
                     </td>
-                    <td className="p-4 max-w-xs md:max-w-md">
-                      <p className="text-sm text-foreground line-clamp-3">{review.comment}</p>
+                    <td className="p-3 md:p-4 flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "মতামত:" : "Comment:"}</span>
+                      <p className="text-sm text-foreground line-clamp-3 text-right md:text-left max-w-[200px] md:max-w-md">{review.comment}</p>
                     </td>
-                    <td className="p-4">
+                    <td className="p-3 md:p-4 flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "স্ট্যাটাস:" : "Status:"}</span>
                       <span className={`inline-block px-2.5 py-1 text-xs font-bold capitalize rounded-md ${
                         review.status === 'approved' ? 'bg-green-100 text-green-600 dark:bg-green-900/30' :
                         'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30'
@@ -233,7 +237,8 @@ export function DashboardReviewsClient() {
                           : review.status}
                       </span>
                     </td>
-                    <td className="p-4 text-right">
+                    <td className="p-3 md:p-4 flex md:table-cell justify-between md:justify-end items-center border-b border-border md:border-0 bg-surface-variant/30 md:bg-transparent rounded-b-xl md:rounded-none mt-2 md:mt-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "অ্যাকশন:" : "Actions:"}</span>
                       <div className="flex items-center justify-end gap-2">
                         {review.status !== "approved" && (
                           <button

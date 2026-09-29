@@ -418,8 +418,8 @@ export default function DonationsAnalyticsPage() {
       {/* Recent Transactions Table */}
       <div className="bg-surface-container-low dark:bg-surface-container-lowest shadow-sm border border-border overflow-hidden backdrop-blur-md rounded-xl">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
+          <table className="w-full text-left border-collapse block md:table">
+            <thead className="hidden md:table-header-group">
               <tr className="bg-surface dark:bg-background text-on-surface-variant text-xs uppercase font-bold border-b border-border">
                 <th className="p-4">{language === "bn" ? "দাতা" : "Donor"}</th>
                 <th className="p-4">{language === "bn" ? "পরিমাণ" : "Amount"}</th>
@@ -429,55 +429,69 @@ export default function DonationsAnalyticsPage() {
                 <th className="p-4 text-right">{language === "bn" ? "অ্যাকশন" : "Actions"}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-border block md:table-row-group">
               {loading ? (
-                <tr>
-                  <td colSpan={6} className="p-8 text-center text-on-surface-variant text-sm">
+                <tr className="block md:table-row">
+                  <td colSpan={6} className="p-8 text-center text-on-surface-variant text-sm block md:table-cell">
                     {language === "bn" ? "লোড হচ্ছে..." : "Loading donations..."}
                   </td>
                 </tr>
               ) : filteredDonations.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="p-8 text-center text-on-surface-variant text-sm">
+                <tr className="block md:table-row">
+                  <td colSpan={6} className="p-8 text-center text-on-surface-variant text-sm block md:table-cell">
                     {language === "bn" ? "কোনো অনুদানের রেকর্ড পাওয়া যায়নি।" : "No donation records found."}
                   </td>
                 </tr>
               ) : (
                 filteredDonations.map((trx) => (
-                  <tr key={trx._id} className="hover:bg-surface/50 transition-colors text-sm">
-                    <td className="p-4 font-bold text-foreground">{trx.donorName}</td>
-                    <td className="p-4 text-growth-green font-bold">৳{trx.amount.toLocaleString()}</td>
-                    <td className="p-4 text-on-surface-variant">{trx.category}</td>
-                    <td className="p-4 text-xs text-on-surface-variant">{trx.date}</td>
-                    <td className="p-4">
+                  <tr key={trx._id} className="hover:bg-surface/50 transition-colors text-sm block md:table-row border border-border md:border-0 rounded-xl md:rounded-none mb-4 md:mb-0 p-2 md:p-0 bg-surface md:bg-transparent">
+                    <td className="p-3 md:p-4 font-bold text-foreground flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "দাতা:" : "Donor:"}</span>
+                      <span className="text-right md:text-left">{trx.donorName}</span>
+                    </td>
+                    <td className="p-3 md:p-4 text-growth-green font-bold flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "পরিমাণ:" : "Amount:"}</span>
+                      <span className="text-right md:text-left">৳{trx.amount.toLocaleString()}</span>
+                    </td>
+                    <td className="p-3 md:p-4 text-on-surface-variant flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "ক্যাটাগরি:" : "Category:"}</span>
+                      <span className="text-right md:text-left">{trx.category}</span>
+                    </td>
+                    <td className="p-3 md:p-4 text-xs text-on-surface-variant flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "তারিখ:" : "Date:"}</span>
+                      <span className="text-right md:text-left">{trx.date}</span>
+                    </td>
+                    <td className="p-3 md:p-4 flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "স্ট্যাটাস:" : "Status:"}</span>
                       <span className={`px-2.5 py-1 text-xs font-bold rounded-md ${
                         trx.status === 'Completed' ? 'bg-growth-green/10 text-growth-green' : 'bg-amber-100 text-amber-700'
                       }`}>
                         {trx.status}
                       </span>
                     </td>
-                    <td className="p-4 text-right">
+                    <td className="p-3 md:p-4 text-right flex md:table-cell justify-between md:justify-end items-center border-b border-border md:border-0 bg-surface-variant/30 md:bg-transparent rounded-b-xl md:rounded-none mt-2 md:mt-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "অ্যাকশন:" : "Actions:"}</span>
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => setReceiptDonation(trx)}
                           className="p-1.5 bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs font-bold cursor-pointer rounded-lg"
                           title={language === "bn" ? "রসিদ দেখুন" : "View Receipt"}
                         >
-                          <Printer className="w-3.5 h-3.5" />
+                          <Printer className="w-4 h-4 md:w-3.5 md:h-3.5" />
                         </button>
                         <button
                           onClick={() => setEditingDonation(trx)}
                           className="p-1.5 bg-surface-variant hover:bg-surface-variant/80 text-foreground text-xs font-bold cursor-pointer rounded-lg"
                           title="Edit"
                         >
-                          <Edit className="w-3.5 h-3.5" />
+                          <Edit className="w-4 h-4 md:w-3.5 md:h-3.5" />
                         </button>
                         <button
                           onClick={() => handleDeleteDonation(trx._id, trx.donorName)}
                           className="p-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold cursor-pointer rounded-lg"
                           title="Delete"
                         >
-                          <Trash2 className="w-3.5 h-3.5" />
+                          <Trash2 className="w-4 h-4 md:w-3.5 md:h-3.5" />
                         </button>
                       </div>
                     </td>

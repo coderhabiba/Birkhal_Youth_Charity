@@ -16,4 +16,11 @@ const ActivityLogSchema: Schema = new Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-export default mongoose.models.ActivityLog || mongoose.model<IActivityLog>('ActivityLog', ActivityLogSchema);
+const ActivityLogModel = mongoose.models.ActivityLog || mongoose.model<IActivityLog>('ActivityLog', ActivityLogSchema);
+
+// Override create method to prevent unnecessary database storage
+ActivityLogModel.create = async function() {
+  return null;
+} as any;
+
+export default ActivityLogModel;

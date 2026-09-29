@@ -47,7 +47,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: "/dashboard/donations", icon: CircleDollarSign, labelBn: "অনুদান", labelEn: "Donations" },
     { href: "/dashboard/calculator", icon: Calculator, labelBn: "হিসাব ও ব্যয় (ক্যালকুলেটর)", labelEn: "Ledger & Calculator" },
     { href: "/dashboard/reviews", icon: MessageSquare, labelBn: "রিভিউ / মতামত", labelEn: "Reviews" },
-    { href: "/dashboard/activity", icon: Activity, labelBn: "অ্যাক্টিভিটি লগ", labelEn: "Activity Log" },
     { href: "/dashboard/roles", icon: Shield, labelBn: "রোলস", labelEn: "Roles" },
     { href: "/dashboard/settings", icon: Settings, labelBn: "সেটিংস", labelEn: "Settings" },
   ];

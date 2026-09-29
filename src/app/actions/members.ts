@@ -4,6 +4,7 @@ import connectToDatabase from "@/lib/mongodb";
 import Member from "@/models/Member";
 import ActivityLog from "@/models/ActivityLog";
 import { revalidatePath } from "next/cache";
+import { clearCache } from "@/lib/cache";
 
 export async function updateMemberStatus(id: string, status: "approved" | "rejected") {
   await connectToDatabase();
@@ -23,6 +24,7 @@ export async function updateMemberStatus(id: string, status: "approved" | "rejec
     revalidatePath("/dashboard/members");
     revalidatePath("/");
     revalidatePath("/members");
+    clearCache();
     return { success: true, member: JSON.parse(JSON.stringify(member)) };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -63,6 +65,7 @@ export async function updateMemberDetails(id: string, data: {
     revalidatePath("/");
     revalidatePath("/members");
     revalidatePath("/about");
+    clearCache();
     return { success: true, member: JSON.parse(JSON.stringify(member)) };
   } catch (error: any) {
     return { success: false, error: error.message || "Failed to update member" };
@@ -102,6 +105,7 @@ export async function createMemberAction(data: {
     revalidatePath("/");
     revalidatePath("/members");
     revalidatePath("/about");
+    clearCache();
     return { success: true, member: JSON.parse(JSON.stringify(member)) };
   } catch (error: any) {
     return { success: false, error: error.message || "Failed to create member" };
@@ -127,6 +131,7 @@ export async function deleteMember(id: string) {
     revalidatePath("/dashboard/members");
     revalidatePath("/");
     revalidatePath("/members");
+    clearCache();
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };

@@ -36,6 +36,7 @@ async function connectToDatabase() {
       connectTimeoutMS: 15000,
       heartbeatFrequencyMS: 10000,
       maxIdleTimeMS: 30000,
+      family: 4, // Force IPv4 to prevent ECONNRESET
     };
 
     cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => {

@@ -15,7 +15,7 @@ async function getDashboardMembers() {
   }));
 }
 
-export default async function MembersPage() {
+export default async function MembersPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
   let members: any[] = [];
   try {
     members = await cachedQuery('dashboard-members', getDashboardMembers, 30_000);
@@ -23,6 +23,8 @@ export default async function MembersPage() {
     console.error("Failed to load dashboard members:", e);
   }
 
-  return <DashboardMembersClient members={members} />;
-}
+  const params = await searchParams;
+  const initialStatusFilter = params?.status || "all";
 
+  return <DashboardMembersClient members={members} initialStatusFilter={initialStatusFilter} />;
+}

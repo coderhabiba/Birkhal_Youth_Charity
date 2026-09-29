@@ -194,8 +194,8 @@ export function DashboardContactClient({ messages }: { messages: any[] }) {
       {/* Messages Table */}
       <div className="bg-surface-container-lowest dark:bg-surface-container-low shadow-sm border border-border overflow-hidden rounded-xl">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
+          <table className="w-full text-left border-collapse block md:table">
+            <thead className="hidden md:table-header-group">
               <tr className="bg-surface dark:bg-background border-b border-border text-on-surface-variant text-xs uppercase font-bold tracking-wider">
                 <th className="p-4">
                   {language === 'bn' ? 'প্রেরক' : 'Sender'}
@@ -215,12 +215,12 @@ export function DashboardContactClient({ messages }: { messages: any[] }) {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-border block md:table-row-group">
               {filteredMessages.length === 0 ? (
-                <tr>
+                <tr className="block md:table-row">
                   <td
                     colSpan={6}
-                    className="p-8 text-center text-on-surface-variant"
+                    className="p-8 text-center text-on-surface-variant block md:table-cell"
                   >
                     {language === 'bn'
                       ? 'কোনো বার্তা পাওয়া যায়নি।'
@@ -231,14 +231,15 @@ export function DashboardContactClient({ messages }: { messages: any[] }) {
                 filteredMessages.map((message: any) => (
                   <tr
                     key={message._id}
-                    className="hover:bg-surface/60 transition-colors"
+                    className="hover:bg-surface/60 transition-colors block md:table-row border border-border md:border-0 rounded-xl md:rounded-none mb-4 md:mb-0 p-2 md:p-0 bg-surface md:bg-transparent"
                   >
-                    <td className="p-4">
+                    <td className="p-3 md:p-4 flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "প্রেরক:" : "Sender:"}</span>
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-surface-variant dark:bg-white/5 flex items-center justify-center shrink-0 border border-border text-on-surface-variant font-bold rounded-xl">
+                        <div className="w-10 h-10 bg-surface-variant dark:bg-white/5 items-center justify-center shrink-0 border border-border text-on-surface-variant font-bold rounded-xl hidden md:flex">
                           {message.name.charAt(0).toUpperCase()}
                         </div>
-                        <div>
+                        <div className="text-right md:text-left">
                           <div className="font-bold text-foreground text-sm">
                             {message.name}
                           </div>
@@ -248,15 +249,19 @@ export function DashboardContactClient({ messages }: { messages: any[] }) {
                         </div>
                       </div>
                     </td>
-                    <td className="p-4">
-                      <div className="font-bold text-foreground text-sm">
-                        {message.subject}
-                      </div>
-                      <div className="text-xs text-on-surface-variant truncate max-w-[300px]">
-                        {message.message}
+                    <td className="p-3 md:p-4 flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "বিষয়:" : "Subject:"}</span>
+                      <div className="text-right md:text-left max-w-[200px] md:max-w-none">
+                        <div className="font-bold text-foreground text-sm">
+                          {message.subject}
+                        </div>
+                        <div className="text-xs text-on-surface-variant truncate max-w-[200px] md:max-w-[300px]">
+                          {message.message}
+                        </div>
                       </div>
                     </td>
-                    <td className="p-4">
+                    <td className="p-3 md:p-4 flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "অনুমোদন:" : "Approval:"}</span>
                       <span
                         className={`inline-block px-2.5 py-1 text-xs font-bold capitalize rounded-md ${
                           message.approvalStatus === 'approved'
@@ -279,7 +284,8 @@ export function DashboardContactClient({ messages }: { messages: any[] }) {
                               : 'Pending'}
                       </span>
                     </td>
-                    <td className="p-4">
+                    <td className="p-3 md:p-4 flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "পড়ার অবস্থা:" : "Status:"}</span>
                       <span
                         className={`inline-block px-2.5 py-1 text-xs font-bold capitalize rounded-md ${
                           message.status === 'replied'
@@ -302,15 +308,19 @@ export function DashboardContactClient({ messages }: { messages: any[] }) {
                               : 'Unread'}
                       </span>
                     </td>
-                    <td className="p-4 text-xs text-on-surface-variant">
+                    <td className="p-3 md:p-4 text-xs text-on-surface-variant flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "তারিখ:" : "Date:"}</span>
+                      <span>
                       {message.createdAt
                         ? format(
                             new Date(message.createdAt),
                             'dd MMM yyyy HH:mm',
                           )
                         : 'N/A'}
+                      </span>
                     </td>
-                    <td className="p-4 text-right">
+                    <td className="p-3 md:p-4 text-right flex md:table-cell justify-between md:justify-end items-center border-b border-border md:border-0 bg-surface-variant/30 md:bg-transparent rounded-b-xl md:rounded-none mt-2 md:mt-0">
+                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "অ্যাকশন:" : "Actions:"}</span>
                       <div className="flex items-center justify-end gap-1.5">
                         {/* View Full Message */}
                         <button
@@ -320,7 +330,7 @@ export function DashboardContactClient({ messages }: { messages: any[] }) {
                             language === 'bn' ? 'বার্তা দেখুন' : 'View Message'
                           }
                         >
-                          <Eye className="w-3.5 h-3.5" />
+                          <Eye className="w-4 h-4 md:w-3.5 md:h-3.5" />
                         </button>
 
                         {/* Approval toggles */}
@@ -333,7 +343,7 @@ export function DashboardContactClient({ messages }: { messages: any[] }) {
                                 'approved',
                               )
                             }
-                            className="px-2 py-1 bg-growth-green hover:bg-[#236026] text-white text-xs font-bold transition-colors cursor-pointer rounded-lg"
+                            className="px-3 py-1.5 md:px-2 md:py-1 bg-growth-green hover:bg-[#236026] text-white text-xs font-bold transition-colors cursor-pointer rounded-lg"
                           >
                             {language === 'bn' ? 'অনুমোদন' : 'Approve'}
                           </button>
@@ -347,7 +357,7 @@ export function DashboardContactClient({ messages }: { messages: any[] }) {
                                 'rejected',
                               )
                             }
-                            className="px-2 py-1 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-colors cursor-pointer rounded-lg"
+                            className="px-3 py-1.5 md:px-2 md:py-1 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-colors cursor-pointer rounded-lg"
                           >
                             {language === 'bn' ? 'বাতিল' : 'Reject'}
                           </button>
@@ -367,7 +377,7 @@ export function DashboardContactClient({ messages }: { messages: any[] }) {
                                 : 'Mark as Replied'
                             }
                           >
-                            <MessageCircle className="w-3.5 h-3.5" />
+                            <MessageCircle className="w-4 h-4 md:w-3.5 md:h-3.5" />
                           </button>
                         )}
 
@@ -378,7 +388,7 @@ export function DashboardContactClient({ messages }: { messages: any[] }) {
                           className="p-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold transition-colors cursor-pointer rounded-lg"
                           title={language === 'bn' ? 'মুছে ফেলুন' : 'Delete'}
                         >
-                          <Trash2 className="w-3.5 h-3.5" />
+                          <Trash2 className="w-4 h-4 md:w-3.5 md:h-3.5" />
                         </button>
                       </div>
                     </td>
