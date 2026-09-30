@@ -166,11 +166,11 @@ export function DashboardMembersClient({ members, initialStatusFilter = "all" }:
         </div>
       </div>
 
-      {/* Members Table */}
-      <div className="bg-surface-container-lowest dark:bg-surface-container-low shadow-sm border border-border overflow-hidden rounded-xl">
+      {/* Members Table — desktop only */}
+      <div className="hidden md:block bg-surface-container-lowest dark:bg-surface-container-low shadow-sm border border-border overflow-hidden rounded-xl">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse block md:table">
-            <thead className="hidden md:table-header-group">
+          <table className="w-full text-left border-collapse">
+            <thead>
               <tr className="bg-surface dark:bg-background border-b border-border text-on-surface-variant text-xs uppercase font-bold tracking-wider">
                 <th className="p-4">{language === "bn" ? "সদস্য" : "Member"}</th>
                 <th className="p-4">{language === "bn" ? "যোগাযোগ ও ঠিকানা" : "Contact & Address"}</th>
@@ -180,25 +180,24 @@ export function DashboardMembersClient({ members, initialStatusFilter = "all" }:
                 <th className="p-4 text-right">{language === "bn" ? "অ্যাকশন" : "Actions"}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border block md:table-row-group">
+            <tbody className="divide-y divide-border">
               {filteredMembers.length === 0 ? (
-                <tr className="block md:table-row">
-                  <td colSpan={6} className="p-8 text-center text-on-surface-variant block md:table-cell">
+                <tr>
+                  <td colSpan={6} className="p-8 text-center text-on-surface-variant">
                     {language === "bn" ? "কোনো সদস্য পাওয়া যায়নি।" : "No members found matching your search."}
                   </td>
                 </tr>
               ) : (
                 filteredMembers.map((member: any) => (
-                  <tr key={member._id} className="hover:bg-surface/60 transition-colors block md:table-row border border-border md:border-0 rounded-xl md:rounded-none mb-4 md:mb-0 p-2 md:p-0 bg-surface md:bg-transparent">
-                    <td className="p-3 md:p-4 flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
-                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "সদস্য:" : "Member:"}</span>
-                      <div className="flex items-center gap-3 text-right md:text-left">
+                  <tr key={member._id} className="hover:bg-surface/60 transition-colors">
+                    <td className="p-4">
+                      <div className="flex items-center gap-3">
                         {member.photoUrl ? (
-                          <div className="w-10 h-10 overflow-hidden shrink-0 border border-border rounded-xl hidden md:block">
+                          <div className="w-10 h-10 overflow-hidden shrink-0 border border-border rounded-xl">
                             <img src={member.photoUrl} alt={member.nameEn || "Member"} className="w-full h-full object-cover object-top rounded-xl" />
                           </div>
                         ) : (
-                          <div className="w-10 h-10 bg-surface-variant dark:bg-white/5 flex items-center justify-center shrink-0 border border-border text-on-surface-variant font-bold rounded-xl hidden md:flex">
+                          <div className="w-10 h-10 bg-surface-variant dark:bg-white/5 flex items-center justify-center shrink-0 border border-border text-on-surface-variant font-bold rounded-xl">
                             {member.nameEn ? member.nameEn.charAt(0) : "M"}
                           </div>
                         )}
@@ -213,21 +212,16 @@ export function DashboardMembersClient({ members, initialStatusFilter = "all" }:
                         </div>
                       </div>
                     </td>
-                    <td className="p-3 md:p-4 flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
-                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "যোগাযোগ:" : "Contact:"}</span>
-                      <div className="text-right md:text-left">
-                        <div className="text-sm font-bold text-foreground">{member.mobileNumber || "N/A"}</div>
-                        <div className="text-xs text-on-surface-variant truncate max-w-[200px]">{member.presentAddress || member.email || "N/A"}</div>
-                      </div>
+                    <td className="p-4">
+                      <div className="text-sm font-bold text-foreground">{member.mobileNumber || "N/A"}</div>
+                      <div className="text-xs text-on-surface-variant truncate max-w-[200px]">{member.presentAddress || member.email || "N/A"}</div>
                     </td>
-                    <td className="p-3 md:p-4 flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
-                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "রক্তের গ্রুপ:" : "Blood:"}</span>
+                    <td className="p-4">
                       <span className="inline-block px-2.5 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 text-xs font-bold border border-red-200 dark:border-transparent rounded-md">
                         {member.bloodGroup || "N/A"}
                       </span>
                     </td>
-                    <td className="p-3 md:p-4 flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
-                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "স্ট্যাটাস:" : "Status:"}</span>
+                    <td className="p-4">
                       <span className={`inline-block px-2.5 py-1 text-xs font-bold capitalize rounded-md ${
                         member.status === 'approved' ? 'bg-growth-green/10 text-growth-green' :
                         member.status === 'rejected' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
@@ -238,39 +232,32 @@ export function DashboardMembersClient({ members, initialStatusFilter = "all" }:
                          (language === "bn" ? "পেন্ডিং" : "Pending")}
                       </span>
                     </td>
-                    <td className="p-3 md:p-4 flex md:table-cell justify-between items-center md:items-start border-b border-border md:border-0">
-                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "তারিখ:" : "Date:"}</span>
+                    <td className="p-4">
                       <span className="text-xs text-on-surface-variant">
                         {member.createdAt ? format(new Date(member.createdAt), "dd MMM yyyy") : "N/A"}
                       </span>
                     </td>
-                    <td className="p-3 md:p-4 flex md:table-cell justify-between md:justify-end items-center border-b border-border md:border-0 bg-surface-variant/30 md:bg-transparent rounded-b-xl md:rounded-none mt-2 md:mt-0">
-                      <span className="md:hidden font-bold text-xs text-on-surface-variant">{language === "bn" ? "অ্যাকশন:" : "Actions:"}</span>
+                    <td className="p-4">
                       <div className="flex items-center justify-end gap-1.5">
-                        {/* View Full Profile */}
                         <button
                           onClick={() => setSelectedMember(member)}
                           className="p-1.5 bg-surface-variant hover:bg-surface-variant/80 text-foreground text-xs font-bold transition-colors cursor-pointer rounded-lg"
                           title={language === "bn" ? "বিবরণ দেখুন" : "View Details"}
                         >
-                          <Eye className="w-4 h-4 md:w-3.5 md:h-3.5" />
+                          <Eye className="w-3.5 h-3.5" />
                         </button>
-
-                        {/* Edit Member Profile */}
                         <button
                           onClick={() => setMemberToEdit(member)}
                           className="p-1.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-bold transition-colors cursor-pointer rounded-lg border border-blue-500/20"
                           title={language === "bn" ? "তথ্য সম্পাদনা করুন" : "Edit Member"}
                         >
-                          <Pencil className="w-4 h-4 md:w-3.5 md:h-3.5" />
+                          <Pencil className="w-3.5 h-3.5" />
                         </button>
-
-                        {/* Status toggles */}
                         {member.status !== "approved" && (
                           <button
                             disabled={isPending}
                             onClick={() => handleStatusChange(member._id, "approved")}
-                            className="px-3 py-1.5 md:px-2 md:py-1 bg-growth-green hover:bg-[#236026] text-white text-xs font-bold transition-colors cursor-pointer rounded-lg"
+                            className="px-2 py-1 bg-growth-green hover:bg-[#236026] text-white text-xs font-bold transition-colors cursor-pointer rounded-lg"
                           >
                             {language === "bn" ? "অনুমোদন" : "Approve"}
                           </button>
@@ -279,20 +266,18 @@ export function DashboardMembersClient({ members, initialStatusFilter = "all" }:
                           <button
                             disabled={isPending}
                             onClick={() => handleStatusChange(member._id, "rejected")}
-                            className="px-3 py-1.5 md:px-2 md:py-1 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-colors cursor-pointer rounded-lg"
+                            className="px-2 py-1 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-colors cursor-pointer rounded-lg"
                           >
                             {language === "bn" ? "বাতিল" : "Reject"}
                           </button>
                         )}
-
-                        {/* Delete member */}
                         <button
                           disabled={isPending}
                           onClick={() => handleDelete(member._id)}
                           className="p-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold transition-colors cursor-pointer rounded-lg"
                           title={language === "bn" ? "মুছে ফেলুন" : "Delete"}
                         >
-                          <Trash2 className="w-4 h-4 md:w-3.5 md:h-3.5" />
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </td>
@@ -302,6 +287,119 @@ export function DashboardMembersClient({ members, initialStatusFilter = "all" }:
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Members Cards — mobile only */}
+      <div className="md:hidden space-y-3">
+        {filteredMembers.length === 0 ? (
+          <div className="p-8 text-center text-on-surface-variant bg-surface-container-lowest border border-border rounded-xl">
+            {language === "bn" ? "কোনো সদস্য পাওয়া যায়নি।" : "No members found matching your search."}
+          </div>
+        ) : (
+          filteredMembers.map((member: any) => (
+            <div key={member._id} className="bg-surface-container-lowest dark:bg-surface-container-low border border-border rounded-xl overflow-hidden shadow-sm">
+              {/* Card Header */}
+              <div className="flex items-center gap-3 p-4 border-b border-border bg-surface dark:bg-surface-container-low">
+                {member.photoUrl ? (
+                  <div className="w-12 h-12 overflow-hidden shrink-0 border border-border rounded-xl">
+                    <img src={member.photoUrl} alt={member.nameEn || "Member"} className="w-full h-full object-cover object-top" />
+                  </div>
+                ) : (
+                  <div className="w-12 h-12 bg-surface-variant dark:bg-white/5 flex items-center justify-center shrink-0 border border-border text-on-surface-variant font-bold text-lg rounded-xl">
+                    {member.nameEn ? member.nameEn.charAt(0) : "M"}
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-foreground text-sm truncate">{member.nameBn || member.nameEn}</div>
+                  {member.nameEn && member.nameBn && (
+                    <div className="text-xs text-on-surface-variant truncate">{member.nameEn}</div>
+                  )}
+                  {member.nidOrBirthCert && (
+                    <div className="text-[11px] text-on-surface-variant opacity-75">NID: {member.nidOrBirthCert}</div>
+                  )}
+                </div>
+                <div className="flex flex-col items-end gap-1.5 shrink-0">
+                  <span className={`inline-block px-2 py-0.5 text-xs font-bold capitalize rounded-md ${
+                    member.status === 'approved' ? 'bg-growth-green/10 text-growth-green' :
+                    member.status === 'rejected' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
+                    'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'
+                  }`}>
+                    {member.status === 'approved' ? (language === "bn" ? "অনুমোদিত" : "Approved") :
+                     member.status === 'rejected' ? (language === "bn" ? "বাতিল" : "Rejected") :
+                     (language === "bn" ? "পেন্ডিং" : "Pending")}
+                  </span>
+                  <span className="inline-block px-2 py-0.5 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 text-xs font-bold border border-red-200 dark:border-transparent rounded-md">
+                    {member.bloodGroup || "N/A"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Card Body */}
+              <div className="p-4 grid grid-cols-2 gap-3 text-xs">
+                <div>
+                  <div className="text-on-surface-variant font-bold mb-0.5">{language === "bn" ? "মোবাইল" : "Mobile"}</div>
+                  <div className="font-bold text-foreground">{member.mobileNumber || "N/A"}</div>
+                </div>
+                <div>
+                  <div className="text-on-surface-variant font-bold mb-0.5">{language === "bn" ? "নিবন্ধনের তারিখ" : "Registered"}</div>
+                  <div className="font-bold text-foreground">{member.createdAt ? format(new Date(member.createdAt), "dd MMM yyyy") : "N/A"}</div>
+                </div>
+                {(member.presentAddress || member.email) && (
+                  <div className="col-span-2">
+                    <div className="text-on-surface-variant font-bold mb-0.5">{language === "bn" ? "ঠিকানা / ইমেইল" : "Address / Email"}</div>
+                    <div className="font-bold text-foreground truncate">{member.presentAddress || member.email}</div>
+                  </div>
+                )}
+              </div>
+
+              {/* Card Actions */}
+              <div className="px-4 pb-4 flex flex-wrap gap-2">
+                <button
+                  onClick={() => setSelectedMember(member)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-surface-variant hover:bg-surface-variant/80 text-foreground text-xs font-bold transition-colors cursor-pointer rounded-lg"
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                  {language === "bn" ? "দেখুন" : "View"}
+                </button>
+                <button
+                  onClick={() => setMemberToEdit(member)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-bold transition-colors cursor-pointer rounded-lg border border-blue-500/20"
+                >
+                  <Pencil className="w-3.5 h-3.5" />
+                  {language === "bn" ? "এডিট" : "Edit"}
+                </button>
+                {member.status !== "approved" && (
+                  <button
+                    disabled={isPending}
+                    onClick={() => handleStatusChange(member._id, "approved")}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-growth-green hover:bg-[#236026] text-white text-xs font-bold transition-colors cursor-pointer rounded-lg"
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    {language === "bn" ? "অনুমোদন" : "Approve"}
+                  </button>
+                )}
+                {member.status !== "rejected" && (
+                  <button
+                    disabled={isPending}
+                    onClick={() => handleStatusChange(member._id, "rejected")}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-colors cursor-pointer rounded-lg"
+                  >
+                    <XCircle className="w-3.5 h-3.5" />
+                    {language === "bn" ? "বাতিল" : "Reject"}
+                  </button>
+                )}
+                <button
+                  disabled={isPending}
+                  onClick={() => handleDelete(member._id)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold transition-colors cursor-pointer rounded-lg ml-auto"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  {language === "bn" ? "মুছুন" : "Delete"}
+                </button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       {/* Member Details Modal */}
