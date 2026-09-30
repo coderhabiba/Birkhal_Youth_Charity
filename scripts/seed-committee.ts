@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 
 const MONGODB_URI =
   process.env.MONGODB_URI ||
-  'mongodb+srv://birkhalyouthorg_db_user:EeqnMH8Q39VleBRC@cluster0.8hr2yka.mongodb.net/?appName=Cluster0';
+  'mongodb+srv://birkhalyouthorg_db_user:EeqnMH8Q39VleBRC@cluster0.8hr2yka.mongodb.net/charity-portal?retryWrites=true&w=majority';
+
 
 const CommitteeSchema = new mongoose.Schema(
   {
