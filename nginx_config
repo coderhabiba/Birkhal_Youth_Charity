@@ -1,6 +1,8 @@
 server {
     listen 80;
     server_name birkhalsocialwelfare.com www.birkhalsocialwelfare.com;
+    
+    client_max_body_size 10M;
 
     location / {
         proxy_pass http://localhost:3000;
