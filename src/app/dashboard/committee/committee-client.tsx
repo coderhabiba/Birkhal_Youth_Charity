@@ -87,13 +87,22 @@ export function DashboardCommitteeClient({ members }: { members: any[] }) {
             <div className="relative w-28 h-28 mb-4">
               <div className="w-full h-full overflow-hidden border-2 border-border bg-surface-variant dark:bg-surface flex items-center justify-center relative rounded-xl">
                 {member.image ? (
-                  <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top rounded-xl" />
-                ) : (
-                  <div className="flex flex-col items-center justify-center text-on-surface-variant">
-                    <UserIcon className="w-10 h-10 mb-1" />
-                    <span className="text-xs font-bold">{member.name.charAt(0)}</span>
-                  </div>
-                )}
+                  <img 
+                    src={member.image} 
+                    alt={member.name} 
+                    className="w-full h-full object-cover object-top rounded-xl"
+                    onError={(e) => {
+                      const el = e.target as HTMLImageElement;
+                      el.style.display = 'none';
+                      const fallback = el.nextElementSibling as HTMLElement;
+                      if (fallback) fallback.style.display = 'flex';
+                    }}
+                  />
+                ) : null}
+                <div className="flex flex-col items-center justify-center text-on-surface-variant" style={{display: member.image ? 'none' : 'flex'}}>
+                  <UserIcon className="w-10 h-10 mb-1" />
+                  <span className="text-xs font-bold">{member.name.charAt(0)}</span>
+                </div>
               </div>
               {member.isVerified && (
                 <div className="absolute -bottom-2 -right-2 bg-growth-green border-2 border-surface flex items-center justify-center text-white px-2 py-0.5 text-[10px] font-bold shadow-sm rounded-md">

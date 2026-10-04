@@ -71,7 +71,7 @@ export function CommitteeModal({ isOpen, onClose, memberToEdit, onSuccess }: Com
       phone,
       address,
       description,
-      image: image || undefined,
+      image,
       isVerified,
     };
 

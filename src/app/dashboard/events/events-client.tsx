@@ -272,6 +272,7 @@ export function DashboardEventsClient({
                     src={event.image}
                     alt={event.title}
                     className="w-full h-full object-cover"
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; (e.target as HTMLImageElement).parentElement!.style.display = 'none'; }}
                   />
                 </div>
               )}
