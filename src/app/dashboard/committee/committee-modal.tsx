@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Upload, CheckCircle2 } from "lucide-react";
+import { X, Upload, CheckCircle2, Link as LinkIcon, Trash2 } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 import { createCommitteeMember, updateCommitteeMember } from "@/app/actions/committee";
+import { compressImage } from "@/lib/compressImage";
 
 interface CommitteeModalProps {
   isOpen: boolean;
@@ -17,6 +18,8 @@ export function CommitteeModal({ isOpen, onClose, memberToEdit, onSuccess }: Com
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [image, setImage] = useState<string>("");
+  const [uploadMode, setUploadMode] = useState<"file" | "url">("file");
+  const [imageUrl, setImageUrl] = useState<string>("");
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const [phone, setPhone] = useState("");
@@ -32,6 +35,7 @@ export function CommitteeModal({ isOpen, onClose, memberToEdit, onSuccess }: Com
       setAddress(memberToEdit.address || "");
       setDescription(memberToEdit.description || "");
       setImage(memberToEdit.image || "");
+      setImageUrl(memberToEdit.image && !memberToEdit.image.startsWith("data:") && !memberToEdit.image.startsWith("/uploads") ? memberToEdit.image : "");
       setIsVerified(memberToEdit.isVerified ?? true);
     } else {
       setName("");
@@ -40,23 +44,23 @@ export function CommitteeModal({ isOpen, onClose, memberToEdit, onSuccess }: Com
       setAddress("");
       setDescription("");
       setImage("");
+      setImageUrl("");
       setIsVerified(true);
     }
     setError("");
   }, [memberToEdit, isOpen]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 2 * 1024 * 1024) {
-        setError(language === "bn" ? "ছবির সাইজ ২ এমবি এর নিচে হতে হবে।" : "Image size must be less than 2MB.");
-        return;
+      try {
+        const compressedBase64 = await compressImage(file, 1200, 1200, 0.85);
+        setImage(compressedBase64);
+        setError("");
+      } catch (err) {
+        console.error("Image compression error:", err);
+        setError(language === "bn" ? "ছবি লোড করতে ব্যর্থ হয়েছে।" : "Failed to process image file.");
       }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
     }
   };
 
@@ -194,22 +198,64 @@ export function CommitteeModal({ isOpen, onClose, memberToEdit, onSuccess }: Com
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-bold text-foreground">
-                {language === "bn" ? "প্রোফাইল ছবি (সর্বোচ্চ ২ এমবি)" : "Profile Photo (Max 2MB)"}
-              </label>
-              <div className="flex items-center gap-4">
-                <input 
-                  type="file" 
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="w-full bg-surface-variant dark:bg-background border border-border p-3 text-sm focus:outline-none focus:border-growth-green text-foreground file:mr-4 file:py-1 file:px-3 file:border-0 file:text-xs file:font-bold file:bg-growth-green file:text-white hover:file:bg-[#236026] cursor-pointer file:rounded-lg rounded-xl" 
-                />
-                {image && (
-                  <div className="w-16 h-16 shrink-0 overflow-hidden border-2 border-growth-green relative rounded-xl">
-                    <img src={image} alt="Preview" className="w-full h-full object-cover object-top rounded-xl" />
-                  </div>
-                )}
+              <div className="flex items-center justify-between">
+                <label className="block text-sm font-bold text-foreground">
+                  {language === "bn" ? "প্রোফাইল ছবি" : "Profile Photo"}
+                </label>
+                <div className="flex text-xs border border-border rounded-lg overflow-hidden">
+                  <button
+                    type="button"
+                    onClick={() => setUploadMode("file")}
+                    className={`px-2.5 py-1 font-bold cursor-pointer transition-colors ${uploadMode === "file" ? "bg-growth-green text-white" : "bg-surface dark:bg-background text-on-surface-variant"}`}
+                  >
+                    {language === "bn" ? "ফাইল আপলোড" : "Upload File"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setUploadMode("url")}
+                    className={`px-2.5 py-1 font-bold cursor-pointer transition-colors ${uploadMode === "url" ? "bg-growth-green text-white" : "bg-surface dark:bg-background text-on-surface-variant"}`}
+                  >
+                    {language === "bn" ? "ইমেজ লিংক" : "Image URL"}
+                  </button>
+                </div>
               </div>
+
+              {uploadMode === "file" ? (
+                <div className="flex items-center gap-4">
+                  <input 
+                    type="file" 
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="w-full bg-surface-variant dark:bg-background border border-border p-3 text-sm focus:outline-none focus:border-growth-green text-foreground file:mr-4 file:py-1 file:px-3 file:border-0 file:text-xs file:font-bold file:bg-growth-green file:text-white hover:file:bg-[#236026] cursor-pointer file:rounded-lg rounded-xl" 
+                  />
+                  {image && (
+                    <div className="w-16 h-16 shrink-0 overflow-hidden border-2 border-growth-green relative rounded-xl">
+                      <img src={image} alt="Preview" className="w-full h-full object-cover object-top rounded-xl" />
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <div className="relative">
+                    <LinkIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" />
+                    <input
+                      type="url"
+                      placeholder="https://example.com/member-photo.jpg"
+                      value={imageUrl}
+                      onChange={(e) => {
+                        setImageUrl(e.target.value);
+                        setImage(e.target.value);
+                      }}
+                      className="w-full pl-9 pr-3 py-2.5 bg-surface-variant dark:bg-background border border-border rounded-xl text-sm focus:outline-none focus:border-growth-green text-foreground"
+                    />
+                  </div>
+                  {image && (
+                    <div className="w-16 h-16 overflow-hidden border-2 border-growth-green relative rounded-xl">
+                      <img src={image} alt="Preview" className="w-full h-full object-cover object-top rounded-xl" />
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="flex items-center gap-3 pt-2">

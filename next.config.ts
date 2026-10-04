@@ -8,14 +8,14 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     return {
-      beforeFiles: [],
-      afterFiles: [],
-      fallback: [
+      beforeFiles: [
         {
           source: '/uploads/:path*',
           destination: '/api/uploads/:path*',
         },
       ],
+      afterFiles: [],
+      fallback: [],
     };
   },
 };

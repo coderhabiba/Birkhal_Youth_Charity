@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { X, Upload, Trash2, Link as LinkIcon } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 import { useRouter } from "next/navigation";
+import { compressImage } from "@/lib/compressImage";
 
 export function EditEventModal({
   event,
@@ -61,23 +62,19 @@ export function EditEventModal({
     }
   }, [event, isOpen]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 5 * 1024 * 1024) {
-      setError(language === "bn" ? "ছবির সাইজ সর্বোচ্চ ৫ মেগাবাইট হতে পারবে।" : "Image size must be less than 5MB.");
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const result = reader.result as string;
-      setImagePreview(result);
-      setFormData(prev => ({ ...prev, image: result }));
+    try {
+      const compressedBase64 = await compressImage(file, 1600, 1600, 0.85);
+      setImagePreview(compressedBase64);
+      setFormData(prev => ({ ...prev, image: compressedBase64 }));
       setError("");
-    };
-    reader.readAsDataURL(file);
+    } catch (err) {
+      console.error("Image compression error:", err);
+      setError(language === "bn" ? "ছবি প্রক্রিয়াকরণ করতে ব্যর্থ হয়েছে।" : "Failed to process image file.");
+    }
   };
 
   const handleRemoveImage = () => {
