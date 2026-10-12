@@ -2,10 +2,9 @@
 
 import { useLanguage } from "@/components/language-provider";
 import { 
-  CircleDollarSign, 
   HeartHandshake, 
-  CheckCircle2, 
-  Users, 
+  GraduationCap,
+  TreePine,
   Smartphone, 
   Copy, 
   Check, 
@@ -30,25 +29,31 @@ export function DonationsClient({
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // 1. Total Completed Donation Amount (Calculated dynamically from real completed donations, default 0)
-  const actualDonationSum = donations.reduce((sum, d) => sum + (Number(d.amount) || 0), 0);
-  const displayAmount = settings["donation_total_fund_override"] !== undefined && settings["donation_total_fund_override"] !== ""
-    ? Number(settings["donation_total_fund_override"])
-    : actualDonationSum;
-
-  // 2. Total Donors Count (Calculated dynamically from real completed donations, default 0)
-  const actualDonorCount = donations.length;
-  const donorCount = settings["donation_total_donors_override"] !== undefined && settings["donation_total_donors_override"] !== ""
-    ? settings["donation_total_donors_override"]
-    : actualDonorCount;
-
-  // 3. Total Families / Projects Supported (Dynamic setting, default 0)
+  // 1. Total Families / Projects Supported (Dynamic setting, default 0)
   const familiesSupported = settings["stat_families_supported"] || settings["stat_volunteers"] || "0";
   const familiesSupportedLabel = (language === "bn" ? settings["stat_families_label_bn"] : settings["stat_families_label_en"]) || (
     language === "bn" ? "সহায়তাপ্রাপ্ত পরিবার ও প্রকল্প" : "Families & Projects Supported"
   );
   const familiesSupportedSub = (language === "bn" ? settings["stat_families_sub_bn"] : settings["stat_families_sub_en"]) || (
     language === "bn" ? "কুমিল্লা, চান্দিনা ও বীরখাল" : "Cumilla, Chandina, Birkhal"
+  );
+
+  // 2. Students Supported (Dynamic setting, default 0)
+  const studentsSupported = settings["stat_students"] || "0";
+  const studentsSupportedLabel = (language === "bn" ? settings["stat_students_label_bn"] : settings["stat_students_label_en"]) || (
+    language === "bn" ? "শিক্ষার্থীকে মেধা বৃত্তি ও সহায়তা" : "Students Sponsored & Education"
+  );
+  const studentsSupportedSub = (language === "bn" ? settings["stat_students_sub_bn"] : settings["stat_students_sub_en"]) || (
+    language === "bn" ? "মেধাবী ও অসচ্ছল শিক্ষার্থীদের পাশে" : "Merit & Education Support"
+  );
+
+  // 3. Tree Plantation & Environmental Projects (Dynamic setting, default 0)
+  const treesPlanted = settings["stat_trees"] || "0";
+  const treesPlantedLabel = (language === "bn" ? settings["stat_trees_label_bn"] : settings["stat_trees_label_en"]) || (
+    language === "bn" ? "পরিবেশ সুরক্ষা ও বৃক্ষরোপণ" : "Trees Planted & Ecology"
+  );
+  const treesPlantedSub = (language === "bn" ? settings["stat_trees_sub_bn"] : settings["stat_trees_sub_en"]) || (
+    language === "bn" ? "সবুজ ও টেকসই সমাজ বিনির্মাণ" : "Green & Sustainable Initiatives"
   );
 
   const heroTitle = (language === "bn" ? settings["donation_hero_title_bn"] : settings["donation_hero_title_en"]) || (
@@ -110,48 +115,11 @@ export function DonationsClient({
         </div>
       </section>
 
-      {/* Summary Counters: Total Donors & Impact */}
+      {/* Summary Impact Counters: 3 Core Pillars */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Total Donors Count */}
-        <div className="bg-surface-container-lowest dark:bg-surface-container-low p-8 shadow-sm border border-border flex items-center gap-6 group hover:shadow-md transition-all rounded-xl">
-          <div className="p-5 bg-reliability-blue/10 text-reliability-blue group-hover:scale-110 transition-transform rounded-xl">
-            <Users className="w-10 h-10" />
-          </div>
-          <div>
-            <p className="font-label-md text-xs uppercase tracking-wider text-on-surface-variant font-bold">
-              {language === "bn" ? "মোট অনুদানকারী দাতা" : "Total Donors Count"}
-            </p>
-            <h2 className="font-headline-xl text-3xl md:text-5xl text-reliability-blue font-bold tracking-tight mt-1">
-              {donorCount} <span className="text-xl font-normal text-on-surface-variant">{language === "bn" ? "জন" : "People"}</span>
-            </h2>
-            <span className="text-[11px] text-growth-green font-bold flex items-center gap-1 mt-1">
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              {language === "bn" ? "সকল অনুদান যাচাইকৃত" : "Verified Contributions"}
-            </span>
-          </div>
-        </div>
-
-        {/* Total Collected Amount */}
-        <div className="bg-surface-container-lowest dark:bg-surface-container-low p-8 shadow-sm border border-border flex items-center gap-6 group hover:shadow-md transition-all rounded-xl">
-          <div className="p-5 bg-growth-green/10 text-growth-green group-hover:scale-110 transition-transform rounded-xl">
-            <CircleDollarSign className="w-10 h-10" />
-          </div>
-          <div>
-            <p className="font-label-md text-xs uppercase tracking-wider text-on-surface-variant font-bold">
-              {language === "bn" ? "মোট সংগৃহীত অনুদান তহবিল" : "Total Welfare Fund"}
-            </p>
-            <h2 className="font-headline-xl text-3xl md:text-5xl text-growth-green font-bold tracking-tight mt-1">
-              ৳ {displayAmount.toLocaleString()}
-            </h2>
-            <span className="text-[11px] text-on-surface-variant font-medium mt-1 block">
-              {language === "bn" ? "শতভাগ স্বচ্ছতা ও জবাবদিহিতা" : "100% Transparently Handled"}
-            </span>
-          </div>
-        </div>
- 
-        {/* Total Families & Beneficiaries Supported */}
-        <div className="bg-surface-container-lowest dark:bg-surface-container-low p-8 shadow-sm border border-border flex items-center gap-6 group hover:shadow-md transition-all sm:col-span-2 lg:col-span-1 rounded-xl">
-          <div className="p-5 bg-impact-orange/10 text-impact-orange group-hover:scale-110 transition-transform rounded-xl">
+        {/* Card 1: Total Families & Beneficiaries Supported */}
+        <div className="bg-surface-container-lowest dark:bg-surface-container-low p-6 sm:p-8 shadow-sm border border-border flex items-center gap-6 group hover:shadow-md transition-all rounded-xl">
+          <div className="p-5 bg-impact-orange/10 text-impact-orange group-hover:scale-110 transition-transform rounded-xl shrink-0">
             <HeartHandshake className="w-10 h-10" />
           </div>
           <div>
@@ -163,6 +131,42 @@ export function DonationsClient({
             </h2>
             <span className="text-[11px] text-on-surface-variant font-medium mt-1 block">
               {familiesSupportedSub}
+            </span>
+          </div>
+        </div>
+
+        {/* Card 2: Students Sponsored & Education */}
+        <div className="bg-surface-container-lowest dark:bg-surface-container-low p-6 sm:p-8 shadow-sm border border-border flex items-center gap-6 group hover:shadow-md transition-all rounded-xl">
+          <div className="p-5 bg-reliability-blue/10 text-reliability-blue group-hover:scale-110 transition-transform rounded-xl shrink-0">
+            <GraduationCap className="w-10 h-10" />
+          </div>
+          <div>
+            <p className="font-label-md text-xs uppercase tracking-wider text-on-surface-variant font-bold">
+              {studentsSupportedLabel}
+            </p>
+            <h2 className="font-headline-xl text-3xl md:text-5xl text-reliability-blue font-bold tracking-tight mt-1">
+              {studentsSupported} <span className="text-xl font-normal text-on-surface-variant">{language === "bn" ? "জন" : "Students"}</span>
+            </h2>
+            <span className="text-[11px] text-on-surface-variant font-medium mt-1 block">
+              {studentsSupportedSub}
+            </span>
+          </div>
+        </div>
+
+        {/* Card 3: Tree Plantation & Environmental Projects */}
+        <div className="bg-surface-container-lowest dark:bg-surface-container-low p-6 sm:p-8 shadow-sm border border-border flex items-center gap-6 group hover:shadow-md transition-all sm:col-span-2 lg:col-span-1 rounded-xl">
+          <div className="p-5 bg-growth-green/10 text-growth-green group-hover:scale-110 transition-transform rounded-xl shrink-0">
+            <TreePine className="w-10 h-10" />
+          </div>
+          <div>
+            <p className="font-label-md text-xs uppercase tracking-wider text-on-surface-variant font-bold">
+              {treesPlantedLabel}
+            </p>
+            <h2 className="font-headline-xl text-3xl md:text-5xl text-growth-green font-bold tracking-tight mt-1">
+              {treesPlanted} <span className="text-xl font-normal text-on-surface-variant">{language === "bn" ? "টি" : "Trees"}</span>
+            </h2>
+            <span className="text-[11px] text-on-surface-variant font-medium mt-1 block">
+              {treesPlantedSub}
             </span>
           </div>
         </div>
