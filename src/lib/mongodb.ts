@@ -29,14 +29,14 @@ async function connectToDatabase() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: true,
-      maxPoolSize: 10,
-      minPoolSize: 2,
-      serverSelectionTimeoutMS: 10000,
-      socketTimeoutMS: 30000,
-      connectTimeoutMS: 15000,
-      heartbeatFrequencyMS: 10000,
-      maxIdleTimeMS: 30000,
-      family: 4, // Force IPv4 to prevent ECONNRESET
+      maxPoolSize: 5,
+      minPoolSize: 1,
+      serverSelectionTimeoutMS: 30000,
+      socketTimeoutMS: 60000,
+      connectTimeoutMS: 30000,
+      heartbeatFrequencyMS: 30000,
+      maxIdleTimeMS: 120000,
+      family: 4,
     };
 
     cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => {
