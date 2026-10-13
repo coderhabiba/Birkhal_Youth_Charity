@@ -247,7 +247,7 @@ export function HomeGallery({
                   alt={item.title}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                  unoptimized={(item.url || '').startsWith('data:')}
+                  unoptimized={(item.url || '').startsWith('data:') || (item.url || '').startsWith('/uploads/')}
                   className="object-cover object-top group-hover:scale-110 transition-transform duration-700 ease-in-out"
                 />
 
@@ -322,7 +322,7 @@ export function HomeGallery({
                 alt={selectedImage.title}
                 fill
                 sizes="100vw"
-                unoptimized={(selectedImage.url || '').startsWith('data:')}
+                unoptimized={(selectedImage.url || '').startsWith('data:') || (selectedImage.url || '').startsWith('/uploads/')}
                 className="object-contain w-full h-full"
               />
             </div>
