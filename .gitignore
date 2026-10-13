@@ -21,6 +21,11 @@
 # hosting setup
 .setup-ssh
 index.js
+check-vps*.js
+
+# uploads
+/public/uploads/*
+!/public/uploads/.gitkeep
 
 # production
 /build

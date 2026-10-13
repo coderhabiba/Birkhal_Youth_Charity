@@ -45,9 +45,9 @@ conn.on('ready', async () => {
       cd "$TARGET_DIR"
       echo "Current dir: $(pwd)"
 
-      echo "Handling local changes & untracked upload files..."
-      git add . || true
-      git stash || true
+      echo "Resetting tracked code changes safely..."
+      git checkout -- . || true
+      git clean -f -e public/uploads || true
 
       echo "Pulling latest code from git..."
       git pull origin main
