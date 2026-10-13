@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/mongodb";
 import CustomPage from "@/models/CustomPage";
+import { processBase64Image } from "@/lib/uploadHelper";
 
 export async function GET(
   request: Request,
@@ -30,6 +31,11 @@ export async function PUT(
     const { slug } = await params;
     const data = await request.json();
 
+    let bannerImage = data.bannerImage;
+    if (bannerImage && bannerImage.startsWith('data:image')) {
+      bannerImage = processBase64Image(bannerImage, `page_${slug}`);
+    }
+
     const updated = await CustomPage.findOneAndUpdate(
       { slug },
       {
@@ -37,7 +43,7 @@ export async function PUT(
         titleEn: data.titleEn,
         subtitleBn: data.subtitleBn,
         subtitleEn: data.subtitleEn,
-        bannerImage: data.bannerImage,
+        bannerImage,
         showInNavbar: Boolean(data.showInNavbar),
         showInFooter: Boolean(data.showInFooter),
         status: data.status || "published",

@@ -5,6 +5,7 @@ import Member from "@/models/Member";
 import ActivityLog from "@/models/ActivityLog";
 import { revalidatePath } from "next/cache";
 import { clearCache } from "@/lib/cache";
+import { processBase64Image } from "@/lib/uploadHelper";
 
 export async function updateMemberStatus(id: string, status: "approved" | "rejected") {
   await connectToDatabase();
@@ -49,7 +50,12 @@ export async function updateMemberDetails(id: string, data: {
 }) {
   await connectToDatabase();
   try {
-    const member = await Member.findByIdAndUpdate(id, data, { new: true });
+    const updateData = { ...data };
+    if (updateData.photoUrl && updateData.photoUrl.startsWith('data:image')) {
+      updateData.photoUrl = processBase64Image(updateData.photoUrl, `member_${id}`);
+    }
+
+    const member = await Member.findByIdAndUpdate(id, updateData, { new: true });
     if (!member) throw new Error("Member not found");
 
     try {
@@ -90,7 +96,12 @@ export async function createMemberAction(data: {
 }) {
   await connectToDatabase();
   try {
-    const member = await Member.create(data);
+    const createData = { ...data };
+    if (createData.photoUrl && createData.photoUrl.startsWith('data:image')) {
+      createData.photoUrl = processBase64Image(createData.photoUrl, 'member');
+    }
+
+    const member = await Member.create(createData);
 
     try {
       await ActivityLog.create({

@@ -4,6 +4,7 @@ import Review from '@/models/Review';
 import ActivityLog from '@/models/ActivityLog';
 import { revalidatePath } from 'next/cache';
 import { invalidateCache } from '@/lib/cache';
+import { processBase64Image } from '@/lib/uploadHelper';
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -17,7 +18,11 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     if (data.designation !== undefined) updateData.designation = data.designation;
     if (data.comment !== undefined) updateData.comment = data.comment;
     if (data.rating !== undefined) updateData.rating = data.rating;
-    if (data.image !== undefined) updateData.image = data.image;
+    if (data.image !== undefined) {
+      updateData.image = data.image && data.image.startsWith('data:image')
+        ? processBase64Image(data.image, `review_${id}`)
+        : data.image;
+    }
 
     const updatedReview = await Review.findByIdAndUpdate(
       id,

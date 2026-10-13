@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectToDatabase from '@/lib/mongodb';
 import Review from '@/models/Review';
+import { processBase64Image } from '@/lib/uploadHelper';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,9 +33,14 @@ export async function POST(req: Request) {
     await connectToDatabase();
     const data = await req.json();
     
+    const createData = { ...data };
+    if (createData.image && createData.image.startsWith('data:image')) {
+      createData.image = processBase64Image(createData.image, 'review');
+    }
+
     // By default all submissions go to pending
     const newReview = await Review.create({
-      ...data,
+      ...createData,
       status: 'pending' // For security, override just in case
     });
     

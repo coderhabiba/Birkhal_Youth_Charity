@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/mongodb";
 import CustomPage from "@/models/CustomPage";
+import { processBase64Image } from "@/lib/uploadHelper";
 
 export async function GET(request: Request) {
   try {
@@ -36,10 +37,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "A page with this URL slug already exists" }, { status: 400 });
     }
 
+    const pageData = { ...data };
+    if (pageData.bannerImage && pageData.bannerImage.startsWith('data:image')) {
+      pageData.bannerImage = processBase64Image(pageData.bannerImage, `page_${cleanSlug}`);
+    }
+
     const newPage = await CustomPage.create({
-      ...data,
+      ...pageData,
       slug: cleanSlug,
-      sections: data.sections || []
+      sections: pageData.sections || []
     });
 
     return NextResponse.json(newPage, { status: 201 });
