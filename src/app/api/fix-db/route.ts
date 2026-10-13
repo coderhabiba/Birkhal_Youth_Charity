@@ -5,11 +5,17 @@ import Member from '@/models/Member';
 import Media from '@/models/Media';
 import Event from '@/models/Event';
 import { processBase64Image } from '@/lib/uploadHelper';
+import { isAuthorizedAdmin } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const isAdmin = await isAuthorizedAdmin(request);
+    if (!isAdmin) {
+      return NextResponse.json({ error: 'Unauthorized admin access required.' }, { status: 401 });
+    }
+
     await connectToDatabase();
 
     const reviews = await Review.find();

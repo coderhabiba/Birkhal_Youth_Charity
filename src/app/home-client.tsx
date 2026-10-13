@@ -643,8 +643,8 @@ export function HomeClient({
                 </h3>
                 <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed">
                   {language === 'bn'
-                    ? 'আমাদের প্রতিটি অনুদানের হিসাব প্রকাশ্য এবং প্রতি মাসের আয়-ব্যয়ের হিসাব সদস্য ও সাধারণ মানুষের জন্য উন্মুক্ত থাকে।'
-                    : 'Every contribution is fully documented and audited. Monthly financial summaries are publicly viewable for all donors and members.'}
+                    ? 'সংগঠনের প্রতিটি অনুদান ও ব্যয়ের নিখুঁত হিসাব, ভাউচার ও ক্যাশলেজার অডিট পরিষদের তত্ত্বাবধানে শতভাগ আমানতদারিতা ও নিষ্ঠার সাথে সংরক্ষণ করা হয়।'
+                    : 'Every donation and expenditure is meticulously recorded, audited, and maintained with complete integrity and fiduciary accountability.'}
                 </p>
               </div>
 
