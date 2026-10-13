@@ -10,17 +10,26 @@ import { cachedQuery } from "@/lib/cache";
 
 export const dynamic = 'force-dynamic';
 
+const QUERY_TIMEOUT = 8000; // 8 seconds max per query
+
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error(`Query timeout after ${ms}ms`)), ms))
+  ]);
+}
+
 async function getHomeData() {
   await connectToDatabase();
 
-  // Run queries in parallel for ultra-fast load time, with generous limits to avoid DB timeouts
+  // Run queries in parallel with individual timeouts
   const [rawReviews, rawCommittee, rawMembers, rawSettings, rawMedia, rawEvents] = await Promise.all([
-    Review.find({ status: 'approved' }).sort({ createdAt: -1 }).limit(200).lean(),
-    Committee.find().sort({ createdAt: 1 }).limit(100).lean(),
-    Member.find({ status: 'approved' }).sort({ createdAt: -1 }).limit(200).lean(),
-    Setting.find().lean(),
-    Media.find({ isDoc: false }).sort({ createdAt: -1 }).limit(200).lean(),
-    Event.find({ status: { $in: ['upcoming', 'ongoing'] } }).sort({ date: 1 }).limit(100).lean()
+    withTimeout(Review.find({ status: 'approved' }).sort({ createdAt: -1 }).limit(50).lean(), QUERY_TIMEOUT).catch(() => []),
+    withTimeout(Committee.find().sort({ createdAt: 1 }).limit(50).lean(), QUERY_TIMEOUT).catch(() => []),
+    withTimeout(Member.find({ status: 'approved' }).sort({ createdAt: -1 }).limit(50).lean(), QUERY_TIMEOUT).catch(() => []),
+    withTimeout(Setting.find().lean(), QUERY_TIMEOUT).catch(() => []),
+    withTimeout(Media.find({ isDoc: false }).sort({ createdAt: -1 }).limit(50).lean(), QUERY_TIMEOUT).catch(() => []),
+    withTimeout(Event.find({ status: { $in: ['upcoming', 'ongoing'] } }).sort({ date: 1 }).limit(50).lean(), QUERY_TIMEOUT).catch(() => [])
   ]);
 
   const initialReviews = rawReviews.map((r: any) => ({
@@ -62,8 +71,10 @@ async function getHomeData() {
   return { initialReviews, committeeMembers, generalMembers, galleryMedia, eventsList, settingsMap };
 }
 
+const EMPTY_HOME_DATA = { initialReviews: [], committeeMembers: [], generalMembers: [], galleryMedia: [], eventsList: [], settingsMap: {} };
+
 export default async function Home() {
-  const data = await cachedQuery('home-page-data', getHomeData, 60_000);
+  const data = await cachedQuery('home-page-data', getHomeData, 60_000).catch(() => EMPTY_HOME_DATA);
 
   return (
     <HomeClient 

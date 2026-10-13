@@ -4,16 +4,8 @@ const conn = new Client();
 const pk = fs.readFileSync('d:/client-projects/9/charity-portal/vps_key', 'utf8');
 
 conn.on('ready', () => {
-  // Read .env manually and test connection
-  const cmd = `cd /var/www/charity-portal && MONGODB_URI=$(grep MONGODB_URI .env | grep -v '#' | grep 'mongodb+srv' | head -1 | cut -d'"' -f2) && echo "URI starts: $(echo $MONGODB_URI | cut -c1-50)" && node -e "
-const m = require('./node_modules/mongoose');
-const uri = '$MONGODB_URI';
-m.connect(uri, {serverSelectionTimeoutMS:15000, family:4})
-  .then(() => m.connection.db.collection('settings').findOne())
-  .then(r => { console.log('QUERY OK:', r ? 'got data' : 'empty'); process.exit(0); })
-  .catch(e => { console.log('ERROR:', e.message); process.exit(1); });
-"`;
-  conn.exec(cmd, (err, s) => {
+  // Wait 5 seconds for app to start, then curl the home page
+  conn.exec('sleep 5 && curl -s -o /dev/null -w "%{http_code} - time: %{time_total}s" http://localhost:3000/', (err, s) => {
     if (err) { console.error(err); conn.end(); return; }
     s.on('close', () => conn.end())
       .on('data', d => process.stdout.write(d))
