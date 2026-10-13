@@ -3,7 +3,7 @@ import Member from '@/models/Member';
 import { MembersClient } from './members-client';
 import { cachedQuery } from '@/lib/cache';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 async function getMembersData() {
   await connectToDatabase();

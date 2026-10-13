@@ -8,7 +8,7 @@ import Event from "@/models/Event";
 import { HomeClient } from "./home-client";
 import { cachedQuery } from "@/lib/cache";
 
-export const revalidate = 60; // ISR: re-fetch data every 60 seconds in background
+export const dynamic = 'force-dynamic';
 
 async function getHomeData() {
   await connectToDatabase();
