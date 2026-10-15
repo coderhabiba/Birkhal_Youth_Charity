@@ -11,7 +11,7 @@ async function getDashboardMembers() {
   return rawMembers.map((m: any) => ({
     ...m,
     _id: m._id.toString(),
-    createdAt: m.createdAt ? m.createdAt.toISOString() : null,
+    createdAt: m.createdAt instanceof Date ? m.createdAt.toISOString() : (m.createdAt ? String(m.createdAt) : null),
   }));
 }
 

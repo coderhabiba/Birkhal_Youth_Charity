@@ -34,15 +34,15 @@ async function connectToDatabase() {
       // Atlas M0 free tier: keep pool tiny to stay within 500-connection limit
       maxPoolSize: 3,
       minPoolSize: 0,
-      serverSelectionTimeoutMS: 8000,
-      connectTimeoutMS: 8000,
+      serverSelectionTimeoutMS: 15000,
+      connectTimeoutMS: 15000,
       // timeoutMS is the modern replacement for socketTimeoutMS (driver v5+)
-      // Sets an overall 8-second limit on any single database operation
-      timeoutMS: 8000,
-      // heartbeatFrequencyMS: monitor server health every 8s
-      heartbeatFrequencyMS: 8000,
-      // Close idle connections after 15s (Atlas M0 kills them at ~30s idle)
-      maxIdleTimeMS: 15000,
+      // Sets an overall 15-second limit on any single database operation
+      timeoutMS: 15000,
+      // heartbeatFrequencyMS: monitor server health every 10s
+      heartbeatFrequencyMS: 10000,
+      // Close idle connections after 20s
+      maxIdleTimeMS: 20000,
       family: 4,
       retryWrites: true,
       retryReads: true,

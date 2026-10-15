@@ -32,35 +32,41 @@ async function getHomeData() {
     withTimeout(Event.find({ status: { $in: ['upcoming', 'ongoing'] } }).sort({ date: 1 }).limit(50).lean(), QUERY_TIMEOUT).catch(() => [])
   ]);
 
+  const toIsoSafe = (val: any) => {
+    if (!val) return null;
+    if (val instanceof Date) return val.toISOString();
+    return String(val);
+  };
+
   const initialReviews = rawReviews.map((r: any) => ({
     ...r,
     _id: r._id.toString(),
-    createdAt: r.createdAt ? r.createdAt.toISOString() : null,
+    createdAt: toIsoSafe(r.createdAt),
   }));
 
   const committeeMembers = rawCommittee.map((c: any) => ({
     ...c,
     _id: c._id.toString(),
-    createdAt: c.createdAt ? c.createdAt.toISOString() : null,
+    createdAt: toIsoSafe(c.createdAt),
   }));
 
   const generalMembers = rawMembers.map((m: any) => ({
     ...m,
     _id: m._id.toString(),
-    createdAt: m.createdAt ? m.createdAt.toISOString() : null,
+    createdAt: toIsoSafe(m.createdAt),
   }));
 
   const galleryMedia = rawMedia.map((m: any) => ({
     ...m,
     _id: m._id.toString(),
-    createdAt: m.createdAt ? m.createdAt.toISOString() : null,
+    createdAt: toIsoSafe(m.createdAt),
   }));
 
   const eventsList = rawEvents.map((e: any) => ({
     ...e,
     _id: e._id.toString(),
-    date: e.date ? e.date.toISOString() : null,
-    createdAt: e.createdAt ? e.createdAt.toISOString() : null,
+    date: toIsoSafe(e.date),
+    createdAt: toIsoSafe(e.createdAt),
   }));
 
   const settingsMap: Record<string, string> = {};
