@@ -12,16 +12,26 @@ export const revalidate = 0; // Don't cache dashboard stats
 async function getDashboardData() {
   await connectToDatabase();
 
-  // Run queries sequentially to avoid exhausting Atlas free tier connection pool
-  const totalMembers = await Member.countDocuments({ status: 'approved' });
-  const pendingMembers = await Member.countDocuments({ status: 'pending' });
-  const completedDonations = await DonationEntry.find({ status: 'Completed' })
-    .select('amount date createdAt category donorName')
-    .lean();
-  const expenses = await Expense.find().select('amount').lean();
-  const activeEvents = await Event.countDocuments({ status: 'upcoming' });
-  const totalReviews = await Review.countDocuments();
-  const recentMembers = await Member.find().sort({ createdAt: -1 }).limit(5).lean();
+  // Run all queries in parallel for maximum speed
+  const [
+    totalMembers,
+    pendingMembers,
+    completedDonations,
+    expenses,
+    activeEvents,
+    totalReviews,
+    recentMembers,
+  ] = await Promise.all([
+    Member.countDocuments({ status: 'approved' }),
+    Member.countDocuments({ status: 'pending' }),
+    DonationEntry.find({ status: 'Completed' })
+      .select('amount date createdAt category donorName')
+      .lean(),
+    Expense.find().select('amount').lean(),
+    Event.countDocuments({ status: 'upcoming' }),
+    Review.countDocuments(),
+    Member.find().sort({ createdAt: -1 }).limit(5).lean(),
+  ]);
 
   const totalDonations = completedDonations.reduce(
     (sum: number, d: any) => sum + (d.amount || 0),
@@ -48,7 +58,7 @@ async function getDashboardData() {
   const recentRegistrations = recentMembers.map((m: any) => ({
     ...m,
     _id: m._id.toString(),
-    createdAt: m.createdAt.toISOString(),
+    createdAt: m.createdAt ? m.createdAt.toISOString() : null,
   }));
 
   const serializableDonations = completedDonations.map((d: any) => ({
@@ -77,7 +87,7 @@ export default async function DashboardOverview() {
   let serializableDonations: any[] = [];
 
   try {
-    const data = await cachedQuery('dashboard-overview', getDashboardData, 30_000);
+    const data = await cachedQuery('dashboard-overview', getDashboardData, 120_000);
     stats = data.stats;
     recentRegistrations = data.recentRegistrations;
     serializableDonations = data.serializableDonations;
