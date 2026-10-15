@@ -31,16 +31,17 @@ async function connectToDatabase() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: true,
-      // Atlas M0 free tier: keep the pool tiny to avoid exhausting the 500-connection limit
+      // Atlas M0 free tier: keep pool tiny to stay within 500-connection limit
       maxPoolSize: 3,
       minPoolSize: 0,
-      serverSelectionTimeoutMS: 12000,
-      // Short socket timeout so stale connections fail fast (8s) instead of blocking for 30s
-      socketTimeoutMS: 8000,
-      connectTimeoutMS: 12000,
-      // Heartbeat every 8s — keeps connections alive before Atlas kills them at ~30s idle
+      serverSelectionTimeoutMS: 8000,
+      connectTimeoutMS: 8000,
+      // timeoutMS is the modern replacement for socketTimeoutMS (driver v5+)
+      // Sets an overall 8-second limit on any single database operation
+      timeoutMS: 8000,
+      // heartbeatFrequencyMS: monitor server health every 8s
       heartbeatFrequencyMS: 8000,
-      // Close idle connections after 15s so Mongoose drops them before Atlas does (~30s)
+      // Close idle connections after 15s (Atlas M0 kills them at ~30s idle)
       maxIdleTimeMS: 15000,
       family: 4,
       retryWrites: true,
