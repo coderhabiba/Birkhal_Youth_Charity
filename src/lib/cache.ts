@@ -63,7 +63,7 @@ export async function cachedQuery<T>(
   }
 
   // Fetch fresh data with in-flight deduplication
-  const fetchPromise = queryFn()
+  const fetchPromise: Promise<T> = queryFn()
     .then((data) => {
       cache.set(key, { data, timestamp: Date.now() });
       inFlight.delete(key);
@@ -72,10 +72,11 @@ export async function cachedQuery<T>(
     .catch((err) => {
       inFlight.delete(key);
       console.error(`[cache] Query failed for key "${key}":`, err.message || err);
-      // If we have any previous stale cache, fallback to it
+      // If we have ANY stale cache (even very old), fall back to it
       const fallback = cache.get(key);
       if (fallback) {
-        return fallback.data;
+        console.warn(`[cache] Using stale fallback for key "${key}"`);
+        return fallback.data as T;
       }
       throw err;
     });

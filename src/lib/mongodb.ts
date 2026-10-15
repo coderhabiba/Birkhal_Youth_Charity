@@ -29,18 +29,29 @@ async function connectToDatabase() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: true,
-      maxPoolSize: 5,
+      maxPoolSize: 10,
       minPoolSize: 1,
-      serverSelectionTimeoutMS: 30000,
-      socketTimeoutMS: 60000,
-      connectTimeoutMS: 30000,
-      heartbeatFrequencyMS: 30000,
-      maxIdleTimeMS: 120000,
+      serverSelectionTimeoutMS: 15000,
+      socketTimeoutMS: 30000,
+      connectTimeoutMS: 15000,
+      // Heartbeat every 10s — keeps the connection alive on Atlas free tier
+      heartbeatFrequencyMS: 10000,
+      // Close idle connections after 25s (before Atlas kills them at ~30s)
+      maxIdleTimeMS: 25000,
       family: 4,
+      // Auto-retry on transient errors
+      retryWrites: true,
+      retryReads: true,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => {
-      return mongoose;
+    cached.promise = mongoose.connect(MONGODB_URI!, opts).then((m) => {
+      // Reset cache on disconnect so the next request triggers a fresh connect
+      m.connection.on('disconnected', () => {
+        console.warn('[mongodb] Connection lost — will reconnect on next request');
+        cached.conn = null;
+        cached.promise = null;
+      });
+      return m;
     });
   }
   
