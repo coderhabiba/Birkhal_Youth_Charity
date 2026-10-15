@@ -29,17 +29,18 @@ async function connectToDatabase() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: true,
-      maxPoolSize: 10,
-      minPoolSize: 1,
+      // Atlas M0 free tier allows ~500 connections total across all apps.
+      // Keep pool tiny so connections are actually released when idle.
+      maxPoolSize: 3,
+      minPoolSize: 0,
       serverSelectionTimeoutMS: 15000,
       socketTimeoutMS: 30000,
       connectTimeoutMS: 15000,
-      // Heartbeat every 10s — keeps the connection alive on Atlas free tier
+      // Heartbeat every 10s — keeps connection alive on Atlas free tier
       heartbeatFrequencyMS: 10000,
-      // Close idle connections after 25s (before Atlas kills them at ~30s)
-      maxIdleTimeMS: 25000,
+      // Close idle connections after 20s (Atlas M0 kills them at ~30s)
+      maxIdleTimeMS: 20000,
       family: 4,
-      // Auto-retry on transient errors
       retryWrites: true,
       retryReads: true,
     };
