@@ -63,7 +63,27 @@ export async function cachedQuery<T>(
   }
 
   // Fetch fresh data with in-flight deduplication
-  const fetchPromise: Promise<T> = queryFn()
+  const runQuery = async (): Promise<T> => {
+    try {
+      return await queryFn();
+    } catch (err: any) {
+      // On network timeout, force a reconnect and retry once
+      if (err?.name === 'MongoNetworkTimeoutError' || err?.name === 'MongoNetworkError') {
+        console.warn(`[cache] Network timeout for "${key}" — reconnecting and retrying once...`);
+        // Trigger a fresh connection on the next connectToDatabase() call
+        const mongoose = await import('mongoose');
+        if (mongoose.default.connection.readyState !== 1) {
+          try { await mongoose.default.disconnect(); } catch (_) {}
+        }
+        // Wait briefly before retry
+        await new Promise(r => setTimeout(r, 500));
+        return await queryFn();
+      }
+      throw err;
+    }
+  };
+
+  const fetchPromise: Promise<T> = runQuery()
     .then((data) => {
       cache.set(key, { data, timestamp: Date.now() });
       inFlight.delete(key);
